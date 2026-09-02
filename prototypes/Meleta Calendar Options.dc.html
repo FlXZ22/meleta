@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#f0eee9;color:#1d1d1f;font-family:system-ui,-apple-system,BlinkMacSystemFont,Inter,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#0066cc;text-decoration:none}a:hover{color:#0071e3}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55);max-width:640px}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+.hr{height:1px;background:#f0f0f0}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Your plan: plain calendar, Mon–Sun, blocks + colors + note dot</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Full Mon–Sun week, a rule on every hour and a faint one on each half hour, current-time line on today. Blocks are colour-coded by you; a small filled dot means a note exists. No status text, no unassigned tray — click a block to open its window, drag on empty space to create one.</div>
+<div class="dv-card" style="width:1420px">
+  <div style="height:52px;background:rgba(245,245,247,.9);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px">
+    <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Meleta</span>
+    <div style="display:flex;align-items:center;gap:22px;font-size:14px;letter-spacing:-0.224px">
+      <span>Record</span><span style="color:#0066cc;font-weight:600">Calendar</span><span>Notes</span><span>Vault</span>
+      <span style="background:#0066cc;color:#fff;padding:9px 18px;border-radius:9999px">New block</span>
+    </div>
+  </div>
+
+  <div style="padding:22px 24px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">‹</span>
+      <span style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">›</span>
+      <span style="margin-left:8px;font-size:34px;font-weight:600;letter-spacing:-0.374px;white-space:nowrap">April 2026</span>
+      <span style="margin-left:8px;font-size:17px;color:#7a7a7a;letter-spacing:-0.374px;white-space:nowrap">6 – 12</span>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;padding:2px;background:#f5f5f7;border-radius:9999px">
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Day</span>
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;background:#ffffff;border:1px solid rgba(0,0,0,.06);font-weight:600">Week</span>
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Month</span>
+    </div>
+    <span style="padding:9px 16px;background:#1d1d1f;color:#fff;border-radius:8px;font-size:14px;white-space:nowrap">Today</span>
+  </div>
+
+  <div style="padding:0 24px 24px">
+    <div style="border:1px solid #e0e0e0;border-radius:18px;overflow:hidden;position:relative">
+
+      <div style="display:grid;grid-template-columns:64px repeat(7,1fr);background:rgba(245,245,247,.92);border-bottom:1px solid #e0e0e0">
+        <div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">MON</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px">6</div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">TUE</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px">7</div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#0066cc;letter-spacing:-0.12px">WED</div><div style="display:flex;align-items:center;gap:8px"><span style="width:30px;height:30px;border-radius:9999px;background:#0066cc;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center">8</span></div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">THU</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px">9</div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">FRI</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px">10</div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">SAT</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px;color:#7a7a7a">11</div></div>
+        <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">SUN</div><div style="font-size:21px;font-weight:600;letter-spacing:0.231px;color:#7a7a7a">12</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:64px repeat(7,1fr)">
+        <div style="display:grid;grid-template-rows:repeat(12,72px)">
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">08:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">09:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">10:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">11:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">12:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">13:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">14:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">15:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">16:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">17:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">18:00</div>
+          <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">19:00</div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;top:74px;left:6px;right:6px;height:142px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</span></div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">09:00 – 10:50</div>
+          </div>
+          <div style="position:absolute;top:290px;left:6px;right:6px;height:70px;background:rgba(88,86,214,.12);border-left:3px solid #5856d6;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#5856d6;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Thesis call</span></div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">11:30 – 12:00</div>
+          </div>
+          <div style="position:absolute;top:506px;left:6px;right:6px;height:106px;background:rgba(52,120,87,.12);border-left:3px solid #347857;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Study — problem set</div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">15:00 – 16:30</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;top:146px;left:6px;right:6px;height:106px;background:rgba(191,90,36,.12);border-left:3px solid #bf5a24;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#bf5a24;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Statistics lab</span></div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">10:00 – 11:30</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;inset:0;background:rgba(0,102,204,.02)"></div>
+          <div style="position:absolute;top:74px;left:6px;right:6px;height:70px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Seminar prep</span></div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">09:00 – 10:00</div>
+          </div>
+          <div style="position:absolute;top:434px;left:6px;right:6px;height:142px;background:#ffffff;border:2px solid #0071e3;border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">14:00 – 15:50</div>
+          </div>
+          <div style="position:absolute;top:394px;left:0;right:0;height:1px;background:#0066cc">
+            <span style="position:absolute;left:-4px;top:-4px;width:9px;height:9px;border-radius:9999px;background:#0066cc"></span>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;top:146px;left:6px;right:6px;height:142px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">10:00 – 11:50</div>
+          </div>
+          <div style="position:absolute;top:578px;left:6px;right:6px;height:70px;background:rgba(88,86,214,.12);border-left:3px solid #5856d6;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Supervisor sync</div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">16:00 – 16:30</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;top:362px;left:6px;right:6px;height:106px;background:rgba(52,120,87,.12);border-left:3px solid #347857;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#347857;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Reading group</span></div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">13:00 – 14:30</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+          <div style="position:absolute;top:218px;left:6px;right:6px;height:214px;background:rgba(122,122,122,.1);border-left:3px solid #7a7a7a;border-radius:8px;padding:9px 12px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Library</div>
+            <div style="margin-top:3px;font-size:12px;color:#333333">11:00 – 14:00</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)"></div>
+      </div>
+
+      <div style="position:absolute;top:150px;left:660px;width:330px;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px;box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:9px;height:9px;border-radius:9999px;background:#0066cc"></span>
+          <span style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">ORGANIC CHEMISTRY</span>
+        </div>
+        <div style="margin-top:10px;font-size:21px;font-weight:600;letter-spacing:0.231px;line-height:1.19">Lecture 12</div>
+        <div style="margin-top:6px;font-size:14px;color:#333333;letter-spacing:-0.224px">Mon 6 April · 09:00 – 10:50 · Hall B</div>
+        <div class="hr" style="margin:16px 0"></div>
+        <div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">NOTE</div>
+        <div style="margin-top:8px;font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry — Lecture 12</div>
+        <p style="margin:6px 0 0;font-size:14px;line-height:1.5;color:#333333">47 min · summarised · 3 action items</p>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap">Open note</span>
+          <span style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Record into block</span>
+        </div>
+        <div class="hr" style="margin:16px 0"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;gap:8px">
+            <span style="width:20px;height:20px;border-radius:9999px;background:#0066cc;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span>
+            <span style="width:20px;height:20px;border-radius:9999px;background:#5856d6"></span>
+            <span style="width:20px;height:20px;border-radius:9999px;background:#347857"></span>
+            <span style="width:20px;height:20px;border-radius:9999px;background:#bf5a24"></span>
+            <span style="width:20px;height:20px;border-radius:9999px;background:#7a7a7a"></span>
+          </div>
+          <span style="font-size:14px;color:#0066cc">Edit block</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a><span style="display:block">The three windows behind 2a, at full size. Refinements to your plan: an empty block offers both “Record now into this block” and “Attach existing capture”; the colour row lives in the same window so recolouring is one click; and creating a block starts from a drag on the grid with the time pre-filled.</span></div>
+<div class="dv-card" style="width:1080px;background:#f5f5f7">
+  <div style="padding:32px;display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+
+    <div style="width:320px;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px">
+      <div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">BLOCK WITH A NOTE</div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:9999px;background:#0066cc"></span><span style="font-size:12px;color:#7a7a7a">ORGANIC CHEMISTRY</span></div>
+      <div style="margin-top:8px;font-size:21px;font-weight:600;letter-spacing:0.231px">Lecture 12</div>
+      <div style="margin-top:6px;font-size:14px;color:#333333">Mon 6 April · 09:00 – 10:50</div>
+      <div class="hr" style="margin:16px 0"></div>
+      <div style="border:1px solid #e0e0e0;border-radius:11px;padding:14px">
+        <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry — Lecture 12</div>
+        <p style="margin:6px 0 0;font-size:14px;line-height:1.5;color:#333333">SN1 vs SN2, solvent effects, mechanism table.</p>
+        <div style="margin-top:10px;font-size:12px;color:#7a7a7a">47 min · 3 action items</div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap">Open note</span>
+        <span style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Add another</span>
+      </div>
+      <div class="hr" style="margin:16px 0"></div>
+      <div style="display:flex;gap:8px"><span style="width:20px;height:20px;border-radius:9999px;background:#0066cc;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span><span style="width:20px;height:20px;border-radius:9999px;background:#5856d6"></span><span style="width:20px;height:20px;border-radius:9999px;background:#347857"></span><span style="width:20px;height:20px;border-radius:9999px;background:#bf5a24"></span><span style="width:20px;height:20px;border-radius:9999px;background:#7a7a7a"></span></div>
+    </div>
+
+    <div style="width:320px;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px">
+      <div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">BLOCK WITHOUT A NOTE</div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:9999px;background:#bf5a24"></span><span style="font-size:12px;color:#7a7a7a">STATISTICS</span></div>
+      <div style="margin-top:8px;font-size:21px;font-weight:600;letter-spacing:0.231px">Statistics lab</div>
+      <div style="margin-top:6px;font-size:14px;color:#333333">Tue 7 April · 10:00 – 11:30</div>
+      <div class="hr" style="margin:16px 0"></div>
+      <div style="border:1px dashed #d2d2d7;border-radius:11px;padding:18px 14px;text-align:center">
+        <div style="font-size:14px;color:#7a7a7a;line-height:1.5">No note in this block yet.</div>
+      </div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+        <span style="background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;text-align:center">Record now into this block</span>
+        <span style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;text-align:center">Attach an existing capture</span>
+      </div>
+      <div class="hr" style="margin:16px 0"></div>
+      <div style="display:flex;gap:8px"><span style="width:20px;height:20px;border-radius:9999px;background:#0066cc"></span><span style="width:20px;height:20px;border-radius:9999px;background:#5856d6"></span><span style="width:20px;height:20px;border-radius:9999px;background:#347857"></span><span style="width:20px;height:20px;border-radius:9999px;background:#bf5a24;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span><span style="width:20px;height:20px;border-radius:9999px;background:#7a7a7a"></span></div>
+    </div>
+
+    <div style="width:320px;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px">
+      <div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">NEW BLOCK — DRAGGED ON THE GRID</div>
+      <div style="margin-top:14px;font-size:21px;font-weight:600;letter-spacing:0.231px;color:#7a7a7a">Untitled block</div>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;color:#7a7a7a">Title</div>
+        <div style="display:flex;gap:10px">
+          <div style="flex:1;border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;font-family:'JetBrains Mono',ui-monospace,monospace">14:00</div>
+          <div style="flex:1;border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;font-family:'JetBrains Mono',ui-monospace,monospace">15:50</div>
+        </div>
+        <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px">Wed 8 April</div>
+        <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;display:flex;justify-content:space-between"><span>Repeats weekly</span><span style="color:#7a7a7a">⌄</span></div>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">COLOUR</div>
+      <div style="margin-top:10px;display:flex;gap:8px"><span style="width:24px;height:24px;border-radius:9999px;background:#0066cc;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span><span style="width:24px;height:24px;border-radius:9999px;background:#5856d6"></span><span style="width:24px;height:24px;border-radius:9999px;background:#347857"></span><span style="width:24px;height:24px;border-radius:9999px;background:#bf5a24"></span><span style="width:24px;height:24px;border-radius:9999px;background:#7a7a7a"></span></div>
+      <div style="margin-top:20px;display:flex;gap:8px">
+        <span style="background:#0066cc;color:#fff;font-size:14px;padding:11px 22px;border-radius:9999px;white-space:nowrap">Create block</span>
+        <span style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Cancel</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "fold <a class="dv-oid" href="#2a">2a</a> into the main app" · "start the grid at 07:00 and go to 22:00" · "let a block hold more than one note"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Calendar directions — three ways to assign captures to blocks</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Week grid, rebuilt. Segmented Day/Week/Month control, a summary strip, courses coded by blue tint depth instead of rainbow colour, and unassigned captures docked in a bottom tray so the grid gets full width. Drop targets highlight the whole column.</div>
+<div class="dv-card" style="width:1180px">
+
+  <div style="height:52px;background:rgba(245,245,247,.9);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px">
+    <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Calendar</span>
+    <div style="display:flex;align-items:center;gap:14px;font-size:14px;letter-spacing:-0.224px;color:#1d1d1f">
+      <span>Record</span><span style="color:#0066cc">Calendar</span><span>Notes</span><span>Vault</span>
+      <span style="background:#0066cc;color:#fff;padding:9px 18px;border-radius:9999px">New note</span>
+    </div>
+  </div>
+
+  <div style="padding:24px 24px 0;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">‹</div>
+      <div style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">›</div>
+      <span style="margin-left:6px;font-size:21px;font-weight:600;letter-spacing:0.231px;white-space:nowrap">6 – 10 April</span>
+      <span style="font-size:14px;color:#7a7a7a;letter-spacing:-0.224px;white-space:nowrap">Week 14</span>
+    </div>
+    <div style="display:flex;padding:2px;background:#f5f5f7;border-radius:9999px">
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Day</span>
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;background:#ffffff;color:#1d1d1f;font-weight:600;border:1px solid rgba(0,0,0,.06)">Week</span>
+      <span style="padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Month</span>
+    </div>
+    <div style="flex:1"></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="padding:9px 14px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;white-space:nowrap">All courses ⌄</span>
+      <span style="padding:9px 14px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;white-space:nowrap">Only blocks with notes</span>
+      <span style="padding:9px 14px;background:#1d1d1f;color:#fff;border-radius:8px;font-size:14px;white-space:nowrap">Today</span>
+    </div>
+  </div>
+
+  <div style="padding:20px 24px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+    <div style="border:1px solid #e0e0e0;border-radius:18px;padding:16px 18px">
+      <div style="font-size:14px;color:#7a7a7a;letter-spacing:-0.224px">Captured this week</div>
+      <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px">4h 12m</div>
+    </div>
+    <div style="border:1px solid #e0e0e0;border-radius:18px;padding:16px 18px">
+      <div style="font-size:14px;color:#7a7a7a;letter-spacing:-0.224px">Blocks with notes</div>
+      <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px">6<span style="font-size:17px;color:#7a7a7a;font-weight:400"> / 9</span></div>
+    </div>
+    <div style="border:1px solid #e0e0e0;border-radius:18px;padding:16px 18px">
+      <div style="font-size:14px;color:#7a7a7a;letter-spacing:-0.224px">Unassigned</div>
+      <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px;color:#0066cc">2</div>
+    </div>
+    <div style="border:1px solid #e0e0e0;border-radius:18px;padding:16px 18px">
+      <div style="font-size:14px;color:#7a7a7a;letter-spacing:-0.224px">Synced to vault</div>
+      <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px">All</div>
+    </div>
+  </div>
+
+  <div style="padding:24px">
+    <div style="border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:72px repeat(5,1fr);background:rgba(245,245,247,.9);border-bottom:1px solid #f0f0f0">
+        <div style="padding:12px 10px;font-size:12px;color:#7a7a7a;text-align:right">CET</div>
+        <div style="padding:12px 14px;border-left:1px solid #f0f0f0"><div style="font-size:12px;color:#7a7a7a">MON</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px">6</span><span style="font-size:12px;color:#7a7a7a">2 notes</span></div></div>
+        <div style="padding:12px 14px;border-left:1px solid #f0f0f0"><div style="font-size:12px;color:#7a7a7a">TUE</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px">7</span><span style="font-size:12px;color:#7a7a7a">1 note</span></div></div>
+        <div style="padding:12px 14px;border-left:1px solid #f0f0f0;background:#ffffff"><div style="font-size:12px;color:#0066cc">WED · TODAY</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px;color:#0066cc">8</span><span style="font-size:12px;color:#0066cc">recording</span></div></div>
+        <div style="padding:12px 14px;border-left:1px solid #f0f0f0"><div style="font-size:12px;color:#7a7a7a">THU</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px">9</span><span style="font-size:12px;color:#7a7a7a">1 note</span></div></div>
+        <div style="padding:12px 14px;border-left:1px solid #f0f0f0"><div style="font-size:12px;color:#7a7a7a">FRI</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px">10</span><span style="font-size:12px;color:#7a7a7a">empty</span></div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:72px repeat(5,1fr)">
+        <div style="display:grid;grid-template-rows:repeat(8,76px)">
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">09:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">10:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">11:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">12:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">13:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">14:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">15:00</div>
+          <div style="font-size:12px;color:#7a7a7a;padding:4px 10px;text-align:right">16:00</div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #f0f0f0;background:repeating-linear-gradient(to bottom,#ffffff 0 75px,#f5f5f7 75px 76px)">
+          <div style="position:absolute;top:4px;left:8px;right:8px;height:144px;background:#0066cc;color:#ffffff;border-radius:11px;padding:12px 14px;overflow:hidden">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry</div>
+            <div style="margin-top:2px;font-size:12px;opacity:.85">09:00 – 10:50 · Hall B</div>
+            <div style="margin-top:12px;display:flex;align-items:center;gap:6px;font-size:12px;background:rgba(255,255,255,.18);border-radius:9999px;padding:5px 10px;max-width:100%">
+              <span style="width:5px;height:5px;border-radius:9999px;background:#ffffff;flex:none"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Lecture 12 · 47 min</span>
+            </div>
+          </div>
+          <div style="position:absolute;top:232px;left:8px;right:8px;height:68px;background:rgba(0,102,204,.1);border-radius:11px;padding:10px 14px;border-left:3px solid #0066cc">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Thesis call</div>
+            <div style="margin-top:2px;font-size:12px;color:#333333">1 note · 22 min</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #f0f0f0;background:repeating-linear-gradient(to bottom,#ffffff 0 75px,#f5f5f7 75px 76px)">
+          <div style="position:absolute;top:156px;left:8px;right:8px;height:68px;background:#f5f5f7;border:1px solid #e0e0e0;border-radius:11px;padding:10px 14px">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Statistics lab</div>
+            <div style="margin-top:2px;font-size:12px;color:#7a7a7a">No note</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #f0f0f0;background:rgba(0,102,204,.035);box-shadow:inset 0 0 0 2px rgba(0,102,204,.35)">
+          <div style="position:absolute;top:4px;left:8px;right:8px;height:68px;background:#0066cc;color:#fff;border-radius:11px;padding:10px 14px">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Seminar prep</div>
+            <div style="margin-top:2px;font-size:12px;opacity:.85">Recording now · 06:14</div>
+          </div>
+          <div style="position:absolute;top:308px;left:8px;right:8px;height:112px;border-radius:11px;border:1px dashed #0066cc;background:rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px;text-align:center">
+            <div style="font-size:12px;font-weight:600;color:#0066cc">Assign here</div>
+            <div style="font-size:12px;color:#333333">14:00 – 15:30 · Free block</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #f0f0f0;background:repeating-linear-gradient(to bottom,#ffffff 0 75px,#f5f5f7 75px 76px)">
+          <div style="position:absolute;top:80px;left:8px;right:8px;height:144px;background:rgba(0,102,204,.1);border-left:3px solid #0066cc;border-radius:11px;padding:12px 14px">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry</div>
+            <div style="margin-top:2px;font-size:12px;color:#333333">Lecture 13 · queued</div>
+          </div>
+        </div>
+
+        <div style="position:relative;border-left:1px solid #f0f0f0;background:repeating-linear-gradient(to bottom,#ffffff 0 75px,#f5f5f7 75px 76px)">
+          <div style="position:absolute;top:384px;left:8px;right:8px;height:68px;background:#f5f5f7;border:1px solid #e0e0e0;border-radius:11px;padding:10px 14px">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Reading group</div>
+            <div style="margin-top:2px;font-size:12px;color:#7a7a7a">No note</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #f0f0f0;background:rgba(245,245,247,.9);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap">2 unassigned</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;flex:1">
+          <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border:1px solid #e0e0e0;border-radius:9999px;padding:8px 14px;white-space:nowrap">
+            <span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span>
+            <span style="font-size:14px;letter-spacing:-0.224px">Untitled capture</span>
+            <span style="font-size:12px;color:#7a7a7a">14:02 · 6 min</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border:1px solid #e0e0e0;border-radius:9999px;padding:8px 14px;white-space:nowrap">
+            <span style="width:6px;height:6px;border-radius:9999px;background:#d2d2d7"></span>
+            <span style="font-size:14px;letter-spacing:-0.224px">Voice memo</span>
+            <span style="font-size:12px;color:#7a7a7a">Yesterday · 3 min</span>
+          </div>
+        </div>
+        <span style="font-size:14px;color:#0066cc;white-space:nowrap">Auto-match by timestamp</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Agenda, not grid. The week reads as a single scrolling day-by-day list, so every block shows its note title, summary line and vault path without hover. Empty blocks become one-tap assign rows. Best on a laptop and it survives narrow windows.</div>
+<div class="dv-card" style="width:720px">
+  <div style="height:52px;background:rgba(245,245,247,.9);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 22px">
+    <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Calendar</span>
+    <div style="display:flex;padding:2px;background:#ffffff;border:1px solid #e0e0e0;border-radius:9999px">
+      <span style="padding:6px 14px;border-radius:9999px;font-size:14px;background:#0066cc;color:#fff">Agenda</span>
+      <span style="padding:6px 14px;border-radius:9999px;font-size:14px;color:#333333">Week</span>
+      <span style="padding:6px 14px;border-radius:9999px;font-size:14px;color:#333333">Month</span>
+    </div>
+  </div>
+
+  <div style="padding:26px 22px 8px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
+    <div>
+      <h2 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">This week</h2>
+      <p style="margin:10px 0 0;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#333333">Two captures are waiting for a block.</p>
+    </div>
+    <span style="background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap">Auto-match</span>
+  </div>
+
+  <div style="padding:18px 22px 8px;display:flex;gap:10px;overflow:hidden">
+    <div style="flex:1;border:1px dashed #0066cc;background:rgba(0,102,204,.04);border-radius:11px;padding:12px 14px">
+      <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Untitled capture · 6 min</div>
+      <div style="margin-top:4px;font-size:12px;color:#333333">Today 14:02 · Brick</div>
+      <div style="margin-top:10px;font-size:12px;color:#0066cc">Choose a block ›</div>
+    </div>
+    <div style="flex:1;border:1px dashed #d2d2d7;background:#fafafc;border-radius:11px;padding:12px 14px">
+      <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Voice memo · 3 min</div>
+      <div style="margin-top:4px;font-size:12px;color:#333333">Yesterday 19:40 · Mic</div>
+      <div style="margin-top:10px;font-size:12px;color:#0066cc">Choose a block ›</div>
+    </div>
+  </div>
+
+  <div style="padding:22px">
+    <div style="display:flex;align-items:baseline;gap:12px;padding:0 0 12px">
+      <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Monday 6</span>
+      <span style="font-size:14px;color:#7a7a7a">2 notes · 69 min captured</span>
+    </div>
+    <div style="border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:start;padding:18px 20px;border-bottom:1px solid #f0f0f0">
+        <div><div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px">09:00</div><div style="font-size:12px;color:#7a7a7a">1h 50m</div></div>
+        <div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">Organic Chemistry · Lecture 12</div>
+          <p style="margin:6px 0 0;font-size:14px;line-height:1.5;color:#333333">SN1 vs SN2, solvent effects, and the exam-critical mechanism table.</p>
+          <div style="margin-top:10px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#7a7a7a">02 Courses / Organic Chemistry / Lecture 12.md</div>
+        </div>
+        <span style="font-size:14px;color:#0066cc;white-space:nowrap">Open</span>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:start;padding:18px 20px;border-bottom:1px solid #f0f0f0">
+        <div><div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px">11:30</div><div style="font-size:12px;color:#7a7a7a">22m</div></div>
+        <div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">Thesis call with Dr. Farkas</div>
+          <p style="margin:6px 0 0;font-size:14px;line-height:1.5;color:#333333">Scope narrowed to two datasets. Chapter 2 draft due the 20th.</p>
+          <div style="margin-top:10px;display:flex;gap:8px"><span style="font-size:12px;background:#f5f5f7;border-radius:9999px;padding:4px 10px">3 tasks</span><span style="font-size:12px;background:#f5f5f7;border-radius:9999px;padding:4px 10px">#thesis</span></div>
+        </div>
+        <span style="font-size:14px;color:#0066cc;white-space:nowrap">Open</span>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:center;padding:18px 20px;background:#fafafc">
+        <div><div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;color:#7a7a7a">14:00</div><div style="font-size:12px;color:#7a7a7a">1h 30m</div></div>
+        <div style="font-size:17px;letter-spacing:-0.374px;color:#7a7a7a">Free block — no recording</div>
+        <span style="font-size:14px;color:#0066cc;white-space:nowrap">Assign capture</span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:baseline;gap:12px;padding:26px 0 12px">
+      <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Wednesday 8</span>
+      <span style="font-size:14px;color:#0066cc">recording now</span>
+    </div>
+    <div style="border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:center;padding:18px 20px;background:#0066cc;color:#fff">
+        <div><div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px">09:00</div><div style="font-size:12px;opacity:.85">06:14 in</div></div>
+        <div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">Seminar prep</div>
+          <div style="margin-top:4px;font-size:14px;opacity:.9">Brick is listening · transcript streaming</div>
+        </div>
+        <span style="font-size:14px;background:rgba(255,255,255,.2);padding:9px 16px;border-radius:9999px;white-space:nowrap">Stop</span>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:center;padding:18px 20px">
+        <div><div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;color:#7a7a7a">14:00</div><div style="font-size:12px;color:#7a7a7a">1h 30m</div></div>
+        <div style="font-size:17px;letter-spacing:-0.374px;color:#7a7a7a">Free block</div>
+        <span style="font-size:14px;color:#0066cc;white-space:nowrap">Assign capture</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Month first, with a day drawer. The month grid answers “which days did I actually capture?” at a glance — filled dots for summarised notes, hollow for untranscribed — and clicking a day slides in a side drawer with that day's blocks and the assign action. Course chips filter the grid.</div>
+<div class="dv-card" style="width:1080px">
+  <div style="height:52px;background:rgba(245,245,247,.9);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px">
+    <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Calendar</span>
+    <div style="display:flex;gap:14px;align-items:center;font-size:14px">
+      <span style="color:#7a7a7a">Day</span><span style="color:#7a7a7a">Week</span><span style="color:#0066cc;font-weight:600">Month</span>
+      <span style="background:#0066cc;color:#fff;padding:9px 18px;border-radius:9999px">New note</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 330px">
+    <div style="padding:24px;border-right:1px solid #f0f0f0">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <h2 style="margin:0;font-size:34px;font-weight:600;letter-spacing:-0.374px">April 2026</h2>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">‹</span>
+          <span style="width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">›</span>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+        <span style="font-size:12px;padding:6px 12px;border-radius:9999px;background:#0066cc;color:#fff;white-space:nowrap">Organic Chemistry · 12</span>
+        <span style="font-size:12px;padding:6px 12px;border-radius:9999px;border:1px solid #e0e0e0;white-space:nowrap">Statistics · 5</span>
+        <span style="font-size:12px;padding:6px 12px;border-radius:9999px;border:1px solid #e0e0e0;white-space:nowrap">Thesis · 3</span>
+        <span style="font-size:12px;padding:6px 12px;border-radius:9999px;border:1px solid #e0e0e0;white-space:nowrap">Unassigned · 2</span>
+      </div>
+
+      <div style="margin-top:20px;border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);background:rgba(245,245,247,.9);border-bottom:1px solid #f0f0f0">
+          <div style="padding:10px 12px;font-size:12px;color:#7a7a7a">MON</div>
+          <div style="padding:10px 12px;font-size:12px;color:#7a7a7a">TUE</div>
+          <div style="padding:10px 12px;font-size:12px;color:#7a7a7a">WED</div>
+          <div style="padding:10px 12px;font-size:12px;color:#7a7a7a">THU</div>
+          <div style="padding:10px 12px;font-size:12px;color:#7a7a7a">FRI</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr)">
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;color:#7a7a7a">30</div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;color:#7a7a7a">31</div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">1</div><div style="margin-top:8px;font-size:12px;color:#333333">Statistics lab</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">2</div></div>
+          <div style="height:104px;padding:10px 12px;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">3</div><div style="margin-top:8px;font-size:12px;color:#333333">Statistics lab</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span></div></div>
+
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;box-shadow:inset 0 0 0 2px #0071e3"><div style="font-size:14px;font-weight:600;color:#0066cc">6</div><div style="margin-top:8px;font-size:12px;color:#1d1d1f">Organic Chem</div><div style="font-size:12px;color:#333333">Thesis call</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">7</div><div style="margin-top:8px;font-size:12px;color:#333333">Statistics lab</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;border:1px solid #d2d2d7"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;background:rgba(0,102,204,.05)"><div style="font-size:14px;font-weight:600;color:#0066cc">8 · today</div><div style="margin-top:8px;font-size:12px;color:#1d1d1f">Seminar prep</div><div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:12px;color:#0066cc"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span>recording</div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">9</div><div style="margin-top:8px;font-size:12px;color:#333333">Organic Chem</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;border:1px solid #d2d2d7"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">10</div><div style="margin-top:8px;font-size:12px;color:#7a7a7a">Reading group</div></div>
+
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">13</div><div style="margin-top:8px;font-size:12px;color:#333333">Organic Chem</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">14</div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">15</div><div style="margin-top:8px;font-size:12px;color:#333333">Seminar</div><div style="margin-top:6px;display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span></div></div>
+          <div style="height:104px;padding:10px 12px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">16</div></div>
+          <div style="height:104px;padding:10px 12px;border-bottom:1px solid #f0f0f0"><div style="font-size:14px;font-weight:600">17</div><div style="margin-top:8px;font-size:12px;color:#7a7a7a">Reading group</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:20px;font-size:12px;color:#7a7a7a;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span>summarised note</span>
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:9999px;border:1px solid #d2d2d7"></span>audio only</span>
+      </div>
+    </div>
+
+    <div style="padding:24px;background:#f5f5f7">
+      <div style="font-size:12px;color:#7a7a7a">MONDAY</div>
+      <div style="font-size:34px;font-weight:600;letter-spacing:-0.374px;line-height:1.1">6 April</div>
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px">
+        <div style="background:#ffffff;border:1px solid #e0e0e0;border-radius:11px;padding:14px 16px">
+          <div style="font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;color:#7a7a7a">09:00 – 10:50</div>
+          <div style="margin-top:5px;font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry</div>
+          <div style="margin-top:4px;font-size:12px;color:#333333;line-height:1.5">Lecture 12 · 47 min · summarised</div>
+          <div style="margin-top:10px;font-size:12px;color:#0066cc">Open note ›</div>
+        </div>
+        <div style="background:#ffffff;border:1px solid #e0e0e0;border-radius:11px;padding:14px 16px">
+          <div style="font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;color:#7a7a7a">11:30 – 12:00</div>
+          <div style="margin-top:5px;font-size:14px;font-weight:600;letter-spacing:-0.224px">Thesis call</div>
+          <div style="margin-top:4px;font-size:12px;color:#333333;line-height:1.5">22 min · 3 action items</div>
+          <div style="margin-top:10px;font-size:12px;color:#0066cc">Open note ›</div>
+        </div>
+        <div style="border:1px dashed #0066cc;background:rgba(0,102,204,.04);border-radius:11px;padding:14px 16px">
+          <div style="font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;color:#0066cc">14:00 – 15:30</div>
+          <div style="margin-top:5px;font-size:14px;font-weight:600;letter-spacing:-0.224px">Free block</div>
+          <div style="margin-top:4px;font-size:12px;color:#333333;line-height:1.5">“Untitled capture” overlaps this window.</div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <span style="background:#0066cc;color:#fff;font-size:12px;padding:8px 14px;border-radius:9999px">Assign it</span>
+            <span style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:12px;padding:8px 14px;border-radius:11px">Pick another</span>
+          </div>
+        </div>
+      </div>
+      <div class="hr" style="margin:22px 0"></div>
+      <div style="font-size:12px;color:#7a7a7a;line-height:1.6">Everything on this day files under<br><span style="font-family:'JetBrains Mono',ui-monospace,monospace;color:#333333">02 Courses / … / 2026-04-06</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "put <a class="dv-oid" href="#1a">1a</a>'s week grid into the main app" · "keep <a class="dv-oid" href="#1a">1a</a> but add <a class="dv-oid" href="#1c">1c</a>'s month view as a third tab" · "make <a class="dv-oid" href="#1b">1b</a> the default and drop the grid"</p>
+</section>
+</x-dc>
+</body>
+</html>

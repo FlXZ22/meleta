@@ -1,0 +1,14 @@
+{
+  "name": "meleta",
+  "version": "0.1.0",
+  "description": "Private, local-first lecture recording and transcription app.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check assets/js/app.js && node --check assets/js/calendar.js && node --check assets/js/db.js && node --check assets/js/recorder.js && node --check assets/js/transcriber.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

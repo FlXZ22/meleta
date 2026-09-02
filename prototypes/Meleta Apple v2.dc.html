@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#ffffff;color:#1d1d1f;font-family:system-ui,-apple-system,BlinkMacSystemFont,Inter,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#0066cc;text-decoration:none}a:hover{color:#0071e3}
+*{box-sizing:border-box}
+@keyframes ml-wave{0%,100%{transform:scaleY(.18)}50%{transform:scaleY(1)}}
+@keyframes ml-caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes ml-dot{0%,100%{opacity:.3}50%{opacity:1}}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.uncertain{border-bottom:1.5px dotted #bf5a24;cursor:text}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ffffff">
+
+  <div style="height:44px;background:#000000;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:28px;font-size:12px;letter-spacing:-0.12px">
+    <span style="opacity:.85">meleta.study</span>
+    <span style="opacity:.85">Device</span>
+    <span style="opacity:.85">Support</span>
+    <span style="display:flex;align-items:center;gap:8px;opacity:.85">
+      <span style="width:6px;height:6px;border-radius:9999px;background:#2997ff;display:inline-block"></span>Brick connected · 87%
+    </span>
+  </div>
+
+  <div style="position:sticky;top:0;z-index:30;height:52px;background:rgba(245,245,247,.82);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 32px">
+    <span style="font-size:21px;font-weight:600;letter-spacing:0.231px">Meleta</span>
+    <div style="display:flex;align-items:center;gap:24px">
+      <div onClick="{{ goRecord }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px" style-hover="color:#0066cc">Record
+        <sc-if value="{{ onRecord }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ goCalendar }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px" style-hover="color:#0066cc">Calendar
+        <sc-if value="{{ onCalendar }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ goNotes }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px" style-hover="color:#0066cc">Notes
+        <sc-if value="{{ onNotes }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ goSearch }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px" style-hover="color:#0066cc">Search
+        <sc-if value="{{ onSearch }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ goVault }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px" style-hover="color:#0066cc">Vault
+        <sc-if value="{{ onVault }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ goMobile }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;letter-spacing:-0.224px;color:#7a7a7a" style-hover="color:#0066cc">Phone
+        <sc-if value="{{ onMobile }}"><span style="width:4px;height:4px;border-radius:9999px;background:#0066cc"></span></sc-if>
+      </div>
+      <div onClick="{{ startRec }}" style="cursor:pointer;background:#0066cc;color:#ffffff;font-size:14px;letter-spacing:-0.224px;padding:9px 18px;border-radius:9999px" style-active="transform:scale(0.95)">Record</div>
+    </div>
+  </div>
+
+  <sc-if value="{{ onRecord }}" hint-placeholder-val="{{ true }}">
+  <div>
+
+    <sc-if value="{{ idle }}">
+    <div>
+      <section style="padding:56px 32px 40px;background:#ffffff">
+        <div style="max-width:1080px;margin:0 auto">
+          <h1 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">Ready when you are.</h1>
+          <p style="margin:12px 0 0;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#333333;max-width:620px">Meleta files the recording into the block you're in right now. You only get asked when the time is ambiguous.</p>
+
+          <div style="margin-top:32px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start">
+            <div style="border:1px solid #e0e0e0;border-radius:18px;padding:26px 28px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">
+                <span style="width:7px;height:7px;border-radius:9999px;background:#0066cc"></span>FILES INTO
+              </div>
+              <div style="margin-top:10px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+                <span style="font-size:34px;font-weight:600;letter-spacing:-0.374px">Seminar prep</span>
+                <span style="font-size:17px;color:#7a7a7a;letter-spacing:-0.374px">Wed 8 April · 09:00 – 10:00</span>
+              </div>
+              <div style="margin-top:8px;font-size:14px;color:#333333;letter-spacing:-0.224px" class="mono">02 Courses / Seminar / 2026-04-08.md</div>
+              <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <div onClick="{{ startRec }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:18px;font-weight:300;padding:15px 34px;border-radius:9999px;white-space:nowrap" style-active="transform:scale(0.95)">Start recording</div>
+                <span style="font-size:14px;color:#0066cc;cursor:pointer;white-space:nowrap">Change block</span>
+                <span style="font-size:14px;color:#7a7a7a;white-space:nowrap">or press ⌘R anywhere</span>
+              </div>
+            </div>
+
+            <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Input</div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+                <div onClick="{{ setBrick }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:11px;border:1px solid #e0e0e0;font-size:14px;letter-spacing:-0.224px;white-space:nowrap">
+                  <span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:2px;background:#1d1d1f"></span>Meleta Brick</span>
+                  <sc-if value="{{ isBrick }}"><span style="color:#0066cc;font-weight:600">✓</span></sc-if>
+                </div>
+                <div onClick="{{ setMic }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:11px;border:1px solid #e0e0e0;font-size:14px;letter-spacing:-0.224px;white-space:nowrap">
+                  <span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:9999px;background:#1d1d1f"></span>Laptop mic</span>
+                  <sc-if value="{{ isMic }}"><span style="color:#0066cc;font-weight:600">✓</span></sc-if>
+                </div>
+              </div>
+              <div style="margin:18px 0;height:1px;background:#f0f0f0"></div>
+              <div style="font-size:12px;color:#7a7a7a;line-height:1.6">Level check<br><span style="color:#333333">Speech detected · room quiet</span></div>
+              <div style="margin-top:12px;height:32px;display:flex;align-items:center;gap:4px">{{ idleWave }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="background:#f5f5f7;padding:56px 32px 72px">
+        <div style="max-width:1080px;margin:0 auto">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px">
+            <h2 style="margin:0;font-size:34px;font-weight:600;letter-spacing:-0.374px">Today</h2>
+            <span onClick="{{ goNotes }}" style="cursor:pointer;font-size:17px;color:#0066cc;letter-spacing:-0.374px">All notes</span>
+          </div>
+          <div style="margin-top:24px;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+            <div onClick="{{ goDetail }}" style="cursor:pointer;display:grid;grid-template-columns:1fr 110px 230px 80px;gap:20px;align-items:center;padding:20px 24px;border-bottom:1px solid #f0f0f0">
+              <div><div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">Organic Chemistry — Lecture 12</div><div style="margin-top:4px;font-size:14px;color:#7a7a7a">Brick · 09:14</div></div>
+              <div style="font-size:14px;color:#7a7a7a">47 min</div>
+              <div style="font-size:14px;color:#333333">Filed · Organic Chemistry</div>
+              <div style="justify-self:end;font-size:14px;color:#0066cc">Open</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 110px 230px 80px;gap:20px;align-items:center;padding:20px 24px;border-bottom:1px solid #f0f0f0">
+              <div><div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">Thesis call with Dr. Farkas</div><div style="margin-top:4px;font-size:14px;color:#7a7a7a">Laptop mic · 11:30</div></div>
+              <div style="font-size:14px;color:#7a7a7a">22 min</div>
+              <div style="font-size:14px;color:#333333">Filed · Thesis</div>
+              <div style="justify-self:end;font-size:14px;color:#0066cc">Open</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;padding:20px 24px;background:rgba(191,90,36,.05)">
+              <div>
+                <div style="font-size:17px;font-weight:600;letter-spacing:-0.374px">14:02 capture · needs a decision</div>
+                <div style="margin-top:4px;font-size:14px;color:#333333;line-height:1.5">Two blocks overlap this time. Everything else filed itself.</div>
+              </div>
+              <div style="justify-self:end;display:flex;gap:8px;flex-wrap:wrap">
+                <span style="cursor:pointer;background:#ffffff;border:1px solid #e0e0e0;border-radius:9999px;padding:9px 16px;font-size:14px;white-space:nowrap">Organic Chemistry 14:00</span>
+                <span style="cursor:pointer;background:#ffffff;border:1px solid #e0e0e0;border-radius:9999px;padding:9px 16px;font-size:14px;white-space:nowrap">Study 14:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ recording }}">
+    <div style="background:#ffffff">
+      <div style="position:sticky;top:52px;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid #e0e0e0;padding:16px 32px">
+        <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="width:10px;height:10px;border-radius:9999px;background:#0066cc;animation:ml-dot 1.4s infinite"></span>
+            <span class="mono" style="font-size:34px;letter-spacing:-0.374px">{{ elapsed }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;height:34px">{{ liveWave }}</div>
+          <div style="min-width:220px">
+            <div style="font-size:12px;color:#7a7a7a;letter-spacing:-0.12px">FILES INTO</div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-size:17px;font-weight:600;letter-spacing:-0.374px;white-space:nowrap">Seminar prep · Wed 09:00</span><span style="font-size:14px;color:#0066cc;cursor:pointer;white-space:nowrap">Change</span></div>
+          </div>
+          <div style="flex:1"></div>
+          <div onClick="{{ addMark }}" style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#1d1d1f;font-size:14px;padding:12px 18px;border-radius:11px;white-space:nowrap" style-active="transform:scale(0.95)">Mark this moment ⌘M</div>
+          <div style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:12px 18px;border-radius:11px;white-space:nowrap">Pause</div>
+          <div onClick="{{ stopRec }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:12px 22px;border-radius:9999px;white-space:nowrap" style-active="transform:scale(0.95)">Stop and save</div>
+        </div>
+      </div>
+
+      <section style="padding:32px;background:#ffffff">
+        <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start">
+          <div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:11px;background:rgba(191,90,36,.08);border:1px solid rgba(191,90,36,.25)">
+              <span style="width:7px;height:7px;border-radius:9999px;background:#bf5a24;flex:none"></span>
+              <span style="font-size:14px;line-height:1.5;color:#1d1d1f">Audio dropped between 04:10 and 04:38 — someone moved a chair. That stretch is marked uncertain in the transcript.</span>
+            </div>
+
+            <div style="margin-top:28px;display:flex;align-items:baseline;justify-content:space-between">
+              <h2 style="margin:0;font-size:21px;font-weight:600;letter-spacing:0.231px">Live transcript</h2>
+              <span style="font-size:14px;color:#7a7a7a">Whisper v3-turbo · 2s behind</span>
+            </div>
+
+            <div style="margin-top:20px;display:flex;flex-direction:column;gap:20px">
+              <div style="display:grid;grid-template-columns:60px 1fr;gap:18px">
+                <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">03:44</span>
+                <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">In SN2 the nucleophile attacks while the leaving group is still attached, so the rate depends on both concentrations.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:60px 1fr;gap:18px">
+                <span class="mono" style="font-size:12px;color:#bf5a24;padding-top:5px">04:10</span>
+                <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#333333">Backside attack means <span class="uncertain">inversion of configuration</span> — and that is where <span class="uncertain">[unclear audio]</span> loses marks every year.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:60px 1fr;gap:18px">
+                <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">05:02</span>
+                <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">SN1 goes through a carbocation, so the rate only depends on the substrate. Tertiary centres are favoured.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:60px 1fr;gap:18px">
+                <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">06:11</span>
+                <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">Polar protic solvents stabilise the intermediate<span style="display:inline-block;width:2px;height:19px;background:#0066cc;margin-left:3px;vertical-align:-3px;animation:ml-caret 1s step-end infinite"></span></p>
+              </div>
+            </div>
+            <div style="margin-top:24px;font-size:12px;color:#7a7a7a;line-height:1.6">Dotted words are low-confidence. Click any word to correct it now, or fix it later in the note — the summary regenerates from your corrections.</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:20px;position:sticky;top:150px">
+            <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Marked moments</span>
+                <span style="font-size:14px;color:#7a7a7a">{{ markCount }}</span>
+              </div>
+              <p style="margin:8px 0 0;font-size:12px;line-height:1.6;color:#7a7a7a">One tap while she's talking. Marks become headings in the note.</p>
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px">{{ markList }}</div>
+              <div onClick="{{ addMark }}" style="margin-top:16px;cursor:pointer;text-align:center;background:#0066cc;color:#fff;font-size:14px;padding:11px 18px;border-radius:9999px" style-active="transform:scale(0.95)">Mark now</div>
+            </div>
+
+            <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Capture health</div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#333333;letter-spacing:-0.224px">
+                <div style="display:flex;justify-content:space-between;gap:12px"><span>Audio level</span><span style="color:#7a7a7a">good</span></div>
+                <div style="display:flex;justify-content:space-between;gap:12px"><span>Uncertain words</span><span style="color:#bf5a24">2</span></div>
+                <div style="display:flex;justify-content:space-between;gap:12px"><span>Local backup</span><span style="color:#7a7a7a">writing</span></div>
+                <div style="display:flex;justify-content:space-between;gap:12px"><span>Brick battery</span><span style="color:#7a7a7a">87%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onCalendar }}">
+  <div>
+    <section style="padding:24px 32px 18px;background:#ffffff">
+      <div style="max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="cursor:pointer;width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">‹</span>
+          <span style="cursor:pointer;width:32px;height:32px;border-radius:9999px;background:rgba(210,210,215,.64);display:flex;align-items:center;justify-content:center;font-size:13px">›</span>
+          <span style="margin-left:8px;font-size:34px;font-weight:600;letter-spacing:-0.374px;white-space:nowrap">April 2026</span>
+          <span style="margin-left:8px;font-size:17px;color:#7a7a7a;letter-spacing:-0.374px;white-space:nowrap">6 – 12</span>
+        </div>
+        <div style="flex:1"></div>
+        <div style="display:flex;padding:2px;background:#f5f5f7;border-radius:9999px">
+          <span style="cursor:pointer;padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Day</span>
+          <span style="padding:7px 16px;border-radius:9999px;font-size:14px;background:#ffffff;border:1px solid rgba(0,0,0,.06);font-weight:600">Week</span>
+          <span onClick="{{ toggleMonth }}" style="cursor:pointer;padding:7px 16px;border-radius:9999px;font-size:14px;color:#333333">Month</span>
+        </div>
+        <span style="cursor:pointer;padding:9px 16px;background:#1d1d1f;color:#fff;border-radius:8px;font-size:14px;white-space:nowrap">Today</span>
+        <div onClick="{{ openNew }}" style="cursor:pointer;padding:9px 18px;background:#0066cc;color:#fff;border-radius:9999px;font-size:14px;white-space:nowrap" style-active="transform:scale(0.95)">New block</div>
+      </div>
+    </section>
+
+    <section style="padding:0 32px 40px;background:#ffffff">
+      <div style="max-width:1600px;margin:0 auto;overflow-x:auto">
+      <div style="min-width:1080px;border:1px solid #e0e0e0;border-radius:18px;overflow:hidden;position:relative">
+        <div style="display:grid;grid-template-columns:64px repeat(7,1fr);background:rgba(245,245,247,.92);border-bottom:1px solid #e0e0e0">
+          <div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">MON</div><div style="font-size:21px;font-weight:600">6</div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">TUE</div><div style="font-size:21px;font-weight:600">7</div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#0066cc">WED</div><div><span style="width:30px;height:30px;border-radius:9999px;background:#0066cc;color:#fff;font-size:17px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">8</span></div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">THU</div><div style="font-size:21px;font-weight:600">9</div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">FRI</div><div style="font-size:21px;font-weight:600">10</div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">SAT</div><div style="font-size:21px;font-weight:600;color:#7a7a7a">11</div></div>
+          <div style="padding:12px 14px;border-left:1px solid #e0e0e0"><div style="font-size:12px;color:#7a7a7a">SUN</div><div style="font-size:21px;font-weight:600;color:#7a7a7a">12</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:64px repeat(7,1fr)">
+          <div style="display:grid;grid-template-rows:repeat(12,72px)">
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">08:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">09:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">10:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">11:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">12:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">13:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">14:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">15:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">16:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">17:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">18:00</div>
+            <div style="font-size:12px;color:#7a7a7a;text-align:right;padding:0 10px;transform:translateY(-6px)">19:00</div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div onClick="{{ openNote }}" style="cursor:pointer;position:absolute;top:74px;left:6px;right:6px;height:142px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</span></div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">09:00 – 10:50</div>
+            </div>
+            <div onClick="{{ openNote }}" style="cursor:pointer;position:absolute;top:290px;left:6px;right:6px;height:70px;background:rgba(88,86,214,.12);border-left:3px solid #5856d6;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#5856d6;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Thesis call</span></div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">11:30 – 12:00</div>
+            </div>
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:506px;left:6px;right:6px;height:106px;background:rgba(52,120,87,.12);border-left:3px solid #347857;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Study — problem set</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">15:00 – 16:30</div>
+            </div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:146px;left:6px;right:6px;height:106px;background:rgba(191,90,36,.12);border-left:3px solid #bf5a24;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Statistics lab</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">10:00 – 11:30</div>
+            </div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div style="position:absolute;inset:0;background:rgba(0,102,204,.02)"></div>
+            <div onClick="{{ openNote }}" style="cursor:pointer;position:absolute;top:74px;left:6px;right:6px;height:70px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Seminar prep</span></div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">09:00 – 10:00</div>
+            </div>
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:434px;left:6px;right:6px;height:142px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">14:00 – 15:50</div>
+            </div>
+            <div style="position:absolute;top:394px;left:0;right:0;height:1px;background:#0066cc"><span style="position:absolute;left:-4px;top:-4px;width:9px;height:9px;border-radius:9999px;background:#0066cc"></span></div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:146px;left:6px;right:6px;height:142px;background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Organic Chemistry</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">10:00 – 11:50</div>
+            </div>
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:578px;left:6px;right:6px;height:70px;background:rgba(88,86,214,.12);border-left:3px solid #5856d6;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Supervisor sync</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">16:00 – 16:30</div>
+            </div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div onClick="{{ openNote }}" style="cursor:pointer;position:absolute;top:362px;left:6px;right:6px;height:106px;background:rgba(52,120,87,.12);border-left:3px solid #347857;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#347857;flex:none"></span><span style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Reading group</span></div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">13:00 – 14:30</div>
+            </div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)">
+            <div onClick="{{ openEmpty }}" style="cursor:pointer;position:absolute;top:218px;left:6px;right:6px;height:214px;background:rgba(122,122,122,.1);border-left:3px solid #7a7a7a;border-radius:8px;padding:9px 12px;overflow:hidden">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Library</div>
+              <div style="margin-top:3px;font-size:12px;color:#333333">11:00 – 14:00</div>
+            </div>
+          </div>
+
+          <div style="position:relative;border-left:1px solid #e0e0e0;height:864px;background:repeating-linear-gradient(to bottom,transparent 0 35px,#fafafc 35px 36px,transparent 36px 71px,#e0e0e0 71px 72px)"></div>
+        </div>
+
+        <sc-if value="{{ popOpen }}">
+        <div>
+          <div onClick="{{ closePop }}" style="position:fixed;inset:0;z-index:40;background:transparent"></div>
+
+          <sc-if value="{{ popNote }}">
+          <div style="position:fixed;top:132px;right:40px;z-index:41;width:330px;max-height:calc(100vh - 170px);overflow-y:auto;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px;box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:9999px;background:#0066cc"></span><span style="font-size:12px;color:#7a7a7a">ORGANIC CHEMISTRY</span></div>
+              <div onClick="{{ closePop }}" style="cursor:pointer;font-size:14px;color:#7a7a7a">✕</div>
+            </div>
+            <div style="margin-top:10px;font-size:21px;font-weight:600;letter-spacing:0.231px">Lecture 12</div>
+            <div style="margin-top:6px;font-size:14px;color:#333333">Mon 6 April · 09:00 – 10:50 · Hall B</div>
+            <div style="margin:16px 0;height:1px;background:#f0f0f0"></div>
+            <div style="border:1px solid #e0e0e0;border-radius:11px;padding:14px">
+              <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry — Lecture 12</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.5;color:#333333">SN1 vs SN2, solvent effects, mechanism table.</p>
+              <div style="margin-top:10px;font-size:12px;color:#7a7a7a">47 min · 3 action items · 4 flagged terms</div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+              <div onClick="{{ goDetail }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap" style-active="transform:scale(0.95)">Open note</div>
+              <div style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Add another</div>
+            </div>
+            <div style="margin:16px 0;height:1px;background:#f0f0f0"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;gap:8px">
+                <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#0066cc;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span>
+                <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#5856d6"></span>
+                <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#347857"></span>
+                <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#bf5a24"></span>
+                <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#7a7a7a"></span>
+              </div>
+              <span style="font-size:14px;color:#0066cc;cursor:pointer">Edit block</span>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ popEmpty }}">
+          <div style="position:fixed;top:132px;right:40px;z-index:41;width:330px;max-height:calc(100vh - 170px);overflow-y:auto;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px;box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:9999px;background:#bf5a24"></span><span style="font-size:12px;color:#7a7a7a">STATISTICS</span></div>
+              <div onClick="{{ closePop }}" style="cursor:pointer;font-size:14px;color:#7a7a7a">✕</div>
+            </div>
+            <div style="margin-top:10px;font-size:21px;font-weight:600;letter-spacing:0.231px">Statistics lab</div>
+            <div style="margin-top:6px;font-size:14px;color:#333333">Tue 7 April · 10:00 – 11:30</div>
+            <div style="margin:16px 0;height:1px;background:#f0f0f0"></div>
+            <div style="border:1px dashed #d2d2d7;border-radius:11px;padding:18px 14px;text-align:center;font-size:14px;color:#7a7a7a;line-height:1.5">No note in this block yet.</div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+              <div onClick="{{ startRec }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;text-align:center;white-space:nowrap" style-active="transform:scale(0.95)">Record now into this block</div>
+              <div onClick="{{ goNotes }}" style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;text-align:center;white-space:nowrap">Attach an existing capture</div>
+            </div>
+            <div style="margin:16px 0;height:1px;background:#f0f0f0"></div>
+            <div style="display:flex;gap:8px">
+              <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#0066cc"></span>
+              <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#5856d6"></span>
+              <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#347857"></span>
+              <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#bf5a24;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span>
+              <span style="cursor:pointer;width:20px;height:20px;border-radius:9999px;background:#7a7a7a"></span>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ popNew }}">
+          <div style="position:fixed;top:132px;right:40px;z-index:41;width:330px;max-height:calc(100vh - 170px);overflow-y:auto;background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:20px;box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:12px;color:#7a7a7a">NEW BLOCK</span>
+              <div onClick="{{ closePop }}" style="cursor:pointer;font-size:14px;color:#7a7a7a">✕</div>
+            </div>
+            <div style="margin-top:12px;font-size:21px;font-weight:600;letter-spacing:0.231px;color:#7a7a7a">Untitled block</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+              <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;color:#7a7a7a">Title</div>
+              <div style="display:flex;gap:10px">
+                <div class="mono" style="flex:1;border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px">14:00</div>
+                <div class="mono" style="flex:1;border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px">15:50</div>
+              </div>
+              <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px">Wed 8 April</div>
+              <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;display:flex;justify-content:space-between"><span>Repeats weekly</span><span style="color:#7a7a7a">⌄</span></div>
+              <div style="border:1px solid #e0e0e0;border-radius:11px;padding:12px 14px;font-size:14px;display:flex;justify-content:space-between"><span>Files into · 02 Courses</span><span style="color:#7a7a7a">⌄</span></div>
+            </div>
+            <div style="margin-top:16px;font-size:12px;color:#7a7a7a">COLOUR</div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <span style="cursor:pointer;width:24px;height:24px;border-radius:9999px;background:#0066cc;box-shadow:0 0 0 2px #fff,0 0 0 3px #0071e3"></span>
+              <span style="cursor:pointer;width:24px;height:24px;border-radius:9999px;background:#5856d6"></span>
+              <span style="cursor:pointer;width:24px;height:24px;border-radius:9999px;background:#347857"></span>
+              <span style="cursor:pointer;width:24px;height:24px;border-radius:9999px;background:#bf5a24"></span>
+              <span style="cursor:pointer;width:24px;height:24px;border-radius:9999px;background:#7a7a7a"></span>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:8px">
+              <div onClick="{{ closePop }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 22px;border-radius:9999px;white-space:nowrap" style-active="transform:scale(0.95)">Create block</div>
+              <div onClick="{{ closePop }}" style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Cancel</div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        </sc-if>
+      </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onNotes }}">
+  <div>
+    <section style="padding:56px 32px 40px;background:#ffffff">
+      <div style="max-width:1440px;margin:0 auto">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+          <h1 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">Notes</h1>
+          <div onClick="{{ goSearch }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;height:44px;padding:0 20px;border:1px solid rgba(0,0,0,.08);border-radius:9999px;min-width:320px;background:#ffffff">
+            <span style="font-size:14px;color:#7a7a7a">⌕</span>
+            <span style="font-size:17px;letter-spacing:-0.374px;color:#7a7a7a">Search inside transcripts</span>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+          <div style="padding:12px 16px;border:2px solid #0071e3;border-radius:9999px;font-size:14px;cursor:pointer;white-space:nowrap">All</div>
+          <div style="padding:12px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;cursor:pointer;white-space:nowrap">Needs review · 2</div>
+          <div style="padding:12px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;cursor:pointer;white-space:nowrap">Organic Chemistry</div>
+          <div style="padding:12px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;cursor:pointer;white-space:nowrap">This week</div>
+        </div>
+
+        <div style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px">
+          <div onClick="{{ goDetail }}" style="cursor:pointer;border:1px solid #e0e0e0;border-radius:18px;padding:24px;background:#ffffff">
+            <div style="height:110px;border-radius:8px;background:#f5f5f7;display:flex;align-items:flex-end;justify-content:center;gap:3px;padding:16px">{{ miniWave }}</div>
+            <div style="margin-top:18px;font-size:17px;font-weight:600;letter-spacing:-0.374px">Organic Chemistry — Lecture 12</div>
+            <div style="margin-top:6px;font-size:14px;color:#7a7a7a">Mon 6 April · 47 min</div>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#333333">SN1 vs SN2, solvent effects, and the exam-relevant mechanism table.</p>
+            <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <span style="font-size:12px;padding:5px 10px;border-radius:9999px;background:rgba(191,90,36,.12);color:#8a3f14;white-space:nowrap">4 terms to confirm</span>
+              <span style="font-size:12px;padding:5px 10px;border-radius:9999px;background:#f5f5f7;color:#333333">#chem</span>
+            </div>
+            <div style="margin-top:16px;font-size:17px;color:#0066cc;letter-spacing:-0.374px">Review and open</div>
+          </div>
+
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:24px;background:#ffffff">
+            <div style="height:110px;border-radius:8px;background:#f5f5f7;display:flex;align-items:flex-end;justify-content:center;gap:3px;padding:16px">{{ miniWave2 }}</div>
+            <div style="margin-top:18px;font-size:17px;font-weight:600;letter-spacing:-0.374px">Thesis call with Dr. Farkas</div>
+            <div style="margin-top:6px;font-size:14px;color:#7a7a7a">Mon 6 April · 22 min</div>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#333333">Scope narrowed to two datasets. Chapter 2 draft due the 20th.</p>
+            <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:12px;padding:5px 10px;border-radius:9999px;background:#f5f5f7;color:#333333">3 tasks</span>
+              <span style="font-size:12px;padding:5px 10px;border-radius:9999px;background:#f5f5f7;color:#333333">#thesis</span>
+            </div>
+            <div style="margin-top:16px;font-size:17px;color:#0066cc;letter-spacing:-0.374px">Open note</div>
+          </div>
+
+          <div style="border:1px solid rgba(191,90,36,.4);border-radius:18px;padding:24px;background:rgba(191,90,36,.04)">
+            <div style="height:110px;border-radius:8px;background:#ffffff;border:1px dashed rgba(191,90,36,.4);display:flex;align-items:center;justify-content:center;font-size:14px;color:#8a3f14;text-align:center;padding:16px;line-height:1.5">Transcription failed<br>at 12%</div>
+            <div style="margin-top:18px;font-size:17px;font-weight:600;letter-spacing:-0.374px">Statistics lab — 3 April</div>
+            <div style="margin-top:6px;font-size:14px;color:#7a7a7a">58 min · audio kept safe</div>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#333333">Whisper timed out twice. The recording is intact in the vault — nothing was lost.</p>
+            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:10px 18px;border-radius:9999px;white-space:nowrap">Retry transcription</span>
+              <span style="cursor:pointer;background:#ffffff;border:1px solid #e0e0e0;color:#333333;font-size:14px;padding:10px 16px;border-radius:11px;white-space:nowrap">Play audio</span>
+            </div>
+          </div>
+
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:24px;background:#ffffff">
+            <div style="height:110px;border-radius:8px;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#7a7a7a;text-align:center;line-height:1.5;padding:16px">Transcribing · 40%<br><span style="font-size:12px">2 h 14 m recording — summary arrives in chunks</span></div>
+            <div style="margin-top:18px;font-size:17px;font-weight:600;letter-spacing:-0.374px">Reading group — long session</div>
+            <div style="margin-top:6px;font-size:14px;color:#7a7a7a">Fri 10 April · 2 h 14 min</div>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.5;color:#333333">First 40 minutes are already readable. You can open it now.</p>
+            <div style="margin-top:16px;font-size:17px;color:#0066cc;letter-spacing:-0.374px">Open partial note</div>
+          </div>
+        </div>
+
+        <div style="margin-top:40px;border:1px dashed #d2d2d7;border-radius:18px;padding:56px 32px;text-align:center;background:#fafafc">
+          <div style="font-size:21px;font-weight:600;letter-spacing:0.231px;color:#333333">Nothing under “Statistics” yet</div>
+          <p style="margin:10px auto 0;max-width:440px;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#7a7a7a">Empty state, for reference: when a filter finds nothing, Meleta offers the one useful action instead of a blank page.</p>
+          <div onClick="{{ startRec }}" style="margin-top:22px;display:inline-block;cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 22px;border-radius:9999px">Record into the next Statistics block</div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onSearch }}">
+  <div>
+    <section style="padding:56px 32px 24px;background:#ffffff">
+      <div style="max-width:980px;margin:0 auto">
+        <h1 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">Search</h1>
+        <div style="margin-top:20px;display:flex;align-items:center;gap:12px;height:52px;padding:0 22px;border:1px solid #e0e0e0;border-radius:9999px">
+          <span style="font-size:17px;color:#7a7a7a">⌕</span>
+          <span style="font-size:21px;letter-spacing:0.231px">solvent effects</span>
+          <div style="flex:1"></div>
+          <span class="mono" style="font-size:12px;color:#7a7a7a">7 moments · 4 notes</span>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <span style="padding:10px 16px;border:2px solid #0071e3;border-radius:9999px;font-size:14px;white-space:nowrap">Transcript moments</span>
+          <span style="padding:10px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;white-space:nowrap">Summaries</span>
+          <span style="padding:10px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;white-space:nowrap">Action items</span>
+          <span style="padding:10px 16px;border:1px solid #e0e0e0;border-radius:9999px;font-size:14px;white-space:nowrap">Marked moments</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:0 32px 64px;background:#ffffff">
+      <div style="max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+
+        <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span class="mono" style="font-size:14px;color:#0066cc">11:47</span>
+            <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry — Lecture 12</span>
+            <span style="font-size:14px;color:#7a7a7a">Mon 6 April</span>
+          </div>
+          <p style="margin:12px 0 0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">“SN1 goes through a carbocation, and polar protic <span style="background:rgba(0,102,204,.14);border-radius:4px;padding:1px 3px">solvents</span> stabilise the intermediate — that is the whole <span style="background:rgba(0,102,204,.14);border-radius:4px;padding:1px 3px">solvent effect</span> story for the exam.”</p>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:10px 18px;border-radius:9999px;white-space:nowrap">Play from 11:47</span>
+            <span onClick="{{ goDetail }}" style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:10px 16px;border-radius:11px;white-space:nowrap">Open in note</span>
+            <span style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:10px 16px;border-radius:11px;white-space:nowrap">Copy quote</span>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span class="mono" style="font-size:14px;color:#0066cc">28:03</span>
+            <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Organic Chemistry — Lecture 9</span>
+            <span style="font-size:14px;color:#7a7a7a">16 March</span>
+            <span style="font-size:12px;padding:4px 10px;border-radius:9999px;background:rgba(191,90,36,.12);color:#8a3f14;white-space:nowrap">low audio here</span>
+          </div>
+          <p style="margin:12px 0 0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">“…aprotic <span style="background:rgba(0,102,204,.14);border-radius:4px;padding:1px 3px">solvents</span> speed up SN2 because the nucleophile stays naked, so <span class="uncertain">[unclear]</span> reactivity goes up.”</p>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:10px 18px;border-radius:9999px;white-space:nowrap">Play from 28:03</span>
+            <span style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:10px 16px;border-radius:11px;white-space:nowrap">Fix this line</span>
+          </div>
+        </div>
+
+        <div style="border:1px solid #e0e0e0;border-radius:18px;padding:22px 24px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span class="mono" style="font-size:14px;color:#0066cc">04:31</span>
+            <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Study — problem set</span>
+            <span style="font-size:14px;color:#7a7a7a">Mon 6 April</span>
+            <span style="font-size:12px;padding:4px 10px;border-radius:9999px;background:#f5f5f7;color:#333333;white-space:nowrap">your marked moment</span>
+          </div>
+          <p style="margin:12px 0 0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">“Question 6 is the one that mixes <span style="background:rgba(0,102,204,.14);border-radius:4px;padding:1px 3px">solvent</span> choice with stereochemistry — do it twice.”</p>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:10px 18px;border-radius:9999px;white-space:nowrap">Play from 04:31</span>
+            <span style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:10px 16px;border-radius:11px;white-space:nowrap">Open in note</span>
+          </div>
+        </div>
+
+        <div style="margin-top:8px;font-size:14px;color:#7a7a7a;line-height:1.5">Results are transcript moments, not whole notes. ⌘K opens this from any screen; ↑↓ moves, ⏎ plays.</div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onDetail }}">
+  <div>
+    <section style="padding:48px 32px 28px;background:#ffffff">
+      <div style="max-width:1180px;margin:0 auto">
+        <div onClick="{{ goNotes }}" style="cursor:pointer;font-size:14px;color:#0066cc">‹ Notes</div>
+        <h1 style="margin:14px 0 0;font-size:40px;font-weight:600;line-height:1.1">Organic Chemistry — Lecture 12</h1>
+        <div style="margin-top:12px;display:flex;gap:20px;flex-wrap:wrap;font-size:14px;color:#7a7a7a">
+          <span>Mon 6 April · 09:00 block</span><span>47 min</span><span>Meleta Brick</span><span>Whisper v3-turbo</span><span>DeepSeek summary</span>
+        </div>
+        <div style="margin-top:20px;display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:11px;background:rgba(191,90,36,.08);border:1px solid rgba(191,90,36,.25);flex-wrap:wrap">
+          <span style="width:7px;height:7px;border-radius:9999px;background:#bf5a24;flex:none"></span>
+          <span style="font-size:14px;line-height:1.5;flex:1;min-width:240px">4 terms are low-confidence and one 28-second stretch had poor audio. Confirm them and the summary rewrites itself.</span>
+          <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:10px 18px;border-radius:9999px;white-space:nowrap">Review 4 terms</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:0 32px 56px;background:#ffffff">
+      <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:44px;align-items:start">
+        <div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f7;border-radius:9999px">
+            <div style="width:36px;height:36px;border-radius:9999px;background:#0066cc;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer">▶</div>
+            <div style="flex:1;height:4px;border-radius:9999px;background:#d2d2d7;position:relative">
+              <div style="position:absolute;left:0;top:0;bottom:0;width:34%;background:#0066cc;border-radius:9999px"></div>
+              <div style="position:absolute;left:24%;top:-4px;width:3px;height:12px;background:#1d1d1f;border-radius:2px"></div>
+              <div style="position:absolute;left:52%;top:-4px;width:3px;height:12px;background:#1d1d1f;border-radius:2px"></div>
+              <div style="position:absolute;left:9%;top:-3px;height:10px;width:6%;background:rgba(191,90,36,.6);border-radius:2px"></div>
+            </div>
+            <span class="mono" style="font-size:12px;color:#333333">16:02 / 47:11</span>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:18px;font-size:12px;color:#7a7a7a;flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:3px;height:10px;background:#1d1d1f;border-radius:2px"></span>your marks</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:8px;background:rgba(191,90,36,.6);border-radius:2px"></span>poor audio</span>
+          </div>
+
+          <div style="margin-top:36px;display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+            <h2 style="margin:0;font-size:21px;font-weight:600;letter-spacing:0.231px">Transcript</h2>
+            <div style="display:flex;gap:8px">
+              <span style="cursor:pointer;font-size:14px;padding:8px 14px;border:1px solid #e0e0e0;border-radius:9999px;white-space:nowrap">Edit mode</span>
+              <span style="cursor:pointer;font-size:14px;padding:8px 14px;border:1px solid #e0e0e0;border-radius:9999px;white-space:nowrap">Flagged only · 4</span>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:22px">
+            <div style="display:grid;grid-template-columns:64px 1fr;gap:18px">
+              <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">00:00</span>
+              <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">Today we finish substitution reactions. Two mechanisms matter for the exam, and the difference is entirely about what the rate depends on.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:64px 1fr;gap:18px">
+              <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">04:18</span>
+              <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">In SN2 the nucleophile attacks while the leaving group is still attached, so the rate depends on both concentrations. Backside attack means <span class="uncertain">inversion</span> of configuration.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:64px 1fr;gap:18px;background:rgba(191,90,36,.06);border-radius:11px;padding:12px 14px;margin-left:-14px">
+              <span class="mono" style="font-size:12px;color:#bf5a24;padding-top:5px">11:47</span>
+              <div>
+                <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">SN1 goes through a <span style="background:#ffffff;border:1px solid #bf5a24;border-radius:5px;padding:1px 6px">carbo cation</span> — the rate only depends on the substrate.</p>
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                  <span style="font-size:12px;color:#8a3f14;white-space:nowrap">Did she say</span>
+                  <span style="cursor:pointer;font-size:14px;padding:7px 14px;border-radius:9999px;background:#0066cc;color:#fff;white-space:nowrap">carbocation</span>
+                  <span style="cursor:pointer;font-size:14px;padding:7px 14px;border-radius:9999px;border:1px solid #e0e0e0;white-space:nowrap">carbo cation</span>
+                  <span style="cursor:pointer;font-size:14px;padding:7px 14px;border-radius:9999px;border:1px solid #e0e0e0;white-space:nowrap">Type it</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:64px 1fr;gap:18px">
+              <span class="mono" style="font-size:12px;color:#0066cc;padding-top:5px">16:02</span>
+              <p style="margin:0;font-size:17px;line-height:1.47;letter-spacing:-0.374px">Write the mechanism table out by hand once: substrate, nucleophile strength, solvent, stereochemistry. If you can reproduce that table, the exam question is mechanical.</p>
+            </div>
+          </div>
+          <div style="margin-top:28px;font-size:17px;color:#0066cc;cursor:pointer">Show full transcript</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;position:sticky;top:76px">
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">AI summary</span>
+              <span style="font-size:12px;color:#7a7a7a;white-space:nowrap">from transcript v3</span>
+            </div>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#333333">SN2 is bimolecular with backside attack and inversion; SN1 is unimolecular through a carbocation, favoured at tertiary centres and in polar protic solvents. The mechanism table is the exam-critical artefact.</p>
+            <div style="margin-top:14px;padding:12px 14px;border-radius:11px;background:#f5f5f7;font-size:12px;line-height:1.6;color:#333333">Built from 96% of the audio. The 28 seconds with poor audio were excluded rather than guessed.</div>
+            <div style="margin:20px 0;height:1px;background:#f0f0f0"></div>
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Action items</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.43;color:#333333"><span style="width:15px;height:15px;border-radius:4px;border:1px solid #d2d2d7;flex:none;margin-top:2px"></span>Hand-write the SN1 / SN2 mechanism table</div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.43;color:#333333"><span style="width:15px;height:15px;border-radius:4px;border:1px solid #d2d2d7;flex:none;margin-top:2px"></span>Problem set 7, questions 1–9</div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.43;color:#333333"><span style="width:15px;height:15px;border-radius:4px;border:1px solid #d2d2d7;flex:none;margin-top:2px"></span>Re-read solvent effects before Thursday</div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+              <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap">Regenerate</span>
+              <span style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Edit by hand</span>
+            </div>
+          </div>
+
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:24px">
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Your marked moments</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:12px;align-items:baseline"><span class="mono" style="font-size:12px;color:#0066cc">11:47</span><span style="font-size:14px;line-height:1.43;color:#333333">carbocation stability</span></div>
+              <div style="display:flex;gap:12px;align-items:baseline"><span class="mono" style="font-size:12px;color:#0066cc">24:10</span><span style="font-size:14px;line-height:1.43;color:#333333">exam hint — table</span></div>
+            </div>
+          </div>
+
+          <div style="border-radius:18px;padding:24px;background:#272729;color:#ffffff">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <span style="font-size:14px;font-weight:600;letter-spacing:-0.224px">Written to Obsidian</span>
+              <span style="font-size:12px;color:#cccccc;white-space:nowrap">09:52 today</span>
+            </div>
+            <div class="mono" style="margin-top:16px;font-size:12px;line-height:2.1;color:#cccccc">
+              <div>Vault/</div>
+              <div style="padding-left:14px">02 Courses/</div>
+              <div style="padding-left:28px">Organic Chemistry/</div>
+              <div style="padding-left:42px;color:#ffffff">Lecture 12.md</div>
+              <div style="padding-left:42px">audio/lecture-12.m4a</div>
+            </div>
+            <div style="margin-top:16px;font-size:12px;color:#cccccc;line-height:1.6">Corrections rewrite this file in place — no duplicates.</div>
+            <div onClick="{{ goVault }}" style="margin-top:16px;color:#2997ff;font-size:14px;cursor:pointer">Sync log ›</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onVault }}">
+  <div>
+    <section style="padding:56px 32px 32px;background:#ffffff">
+      <div style="max-width:1180px;margin:0 auto">
+        <h1 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">Vault</h1>
+        <p style="margin:12px 0 0;max-width:640px;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#333333">Every write Meleta makes to Obsidian, and the rules it follows. If something fails, it says so here — nothing is written silently.</p>
+
+        <div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:18px 20px">
+            <div style="font-size:14px;color:#7a7a7a">Written today</div>
+            <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px">7</div>
+          </div>
+          <div style="border:1px solid rgba(191,90,36,.4);border-radius:18px;padding:18px 20px;background:rgba(191,90,36,.05)">
+            <div style="font-size:14px;color:#8a3f14">Needs attention</div>
+            <div style="margin-top:6px;font-size:34px;font-weight:600;letter-spacing:-0.374px;color:#8a3f14">2</div>
+          </div>
+          <div style="border:1px solid #e0e0e0;border-radius:18px;padding:18px 20px">
+            <div style="font-size:14px;color:#7a7a7a">Last full sync</div>
+            <div style="margin-top:6px;font-size:21px;font-weight:600;letter-spacing:0.231px">09:52 · 4 min ago</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:0 32px 40px;background:#ffffff">
+      <div style="max-width:1180px;margin:0 auto;border:1px solid #e0e0e0;border-radius:18px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:150px 1fr 140px 150px;gap:18px;padding:14px 22px;background:rgba(245,245,247,.9);border-bottom:1px solid #e0e0e0;font-size:12px;color:#7a7a7a">
+          <span>TIME</span><span>FILE</span><span>RESULT</span><span></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 140px 150px;gap:18px;padding:18px 22px;border-bottom:1px solid #f0f0f0;align-items:center">
+          <span class="mono" style="font-size:14px;color:#333333">09:52</span>
+          <span class="mono" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">02 Courses/Organic Chemistry/Lecture 12.md</span>
+          <span style="font-size:14px;color:#333333">written</span>
+          <span style="font-size:14px;color:#0066cc;justify-self:end;cursor:pointer;white-space:nowrap">Reveal in vault</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 140px 150px;gap:18px;padding:18px 22px;border-bottom:1px solid #f0f0f0;align-items:center;background:rgba(191,90,36,.05)">
+          <span class="mono" style="font-size:14px;color:#8a3f14">09:41</span>
+          <div style="min-width:0">
+            <div class="mono" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">02 Courses/Statistics/2026-04-03.md</div>
+            <div style="margin-top:4px;font-size:12px;color:#8a3f14;line-height:1.5">File changed in Obsidian after Meleta last wrote it.</div>
+          </div>
+          <span style="font-size:14px;color:#8a3f14">conflict</span>
+          <div style="justify-self:end;display:flex;gap:8px;flex-wrap:wrap">
+            <span style="cursor:pointer;font-size:14px;color:#0066cc;white-space:nowrap">Compare</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 140px 150px;gap:18px;padding:18px 22px;border-bottom:1px solid #f0f0f0;align-items:center;background:rgba(191,90,36,.05)">
+          <span class="mono" style="font-size:14px;color:#8a3f14">08:15</span>
+          <div style="min-width:0">
+            <div class="mono" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">01 Inbox/2026-04-08-1402.md</div>
+            <div style="margin-top:4px;font-size:12px;color:#8a3f14;line-height:1.5">No block matched. Sitting in Inbox until you assign it.</div>
+          </div>
+          <span style="font-size:14px;color:#8a3f14">unfiled</span>
+          <span onClick="{{ goCalendar }}" style="font-size:14px;color:#0066cc;justify-self:end;cursor:pointer;white-space:nowrap">Assign a block</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr 140px 150px;gap:18px;padding:18px 22px;align-items:center">
+          <span class="mono" style="font-size:14px;color:#333333">Yesterday</span>
+          <span class="mono" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">02 Courses/Thesis/2026-04-06.md</span>
+          <span style="font-size:14px;color:#333333">written</span>
+          <span style="font-size:14px;color:#0066cc;justify-self:end;cursor:pointer;white-space:nowrap">Reveal in vault</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:#f5f5f7;padding:56px 32px 72px">
+      <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+        <div style="background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:26px">
+          <div style="font-size:21px;font-weight:600;letter-spacing:0.231px">Filing rule</div>
+          <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#333333">The path is built from the block, so a note can never land somewhere you didn't define.</p>
+          <div class="mono" style="margin-top:18px;padding:16px;border-radius:11px;background:#f5f5f7;font-size:12px;line-height:2;color:#333333">
+            <div>{vault}/02 Courses/{course}/{title}.md</div>
+            <div>{vault}/02 Courses/{course}/audio/{slug}.m4a</div>
+            <div style="color:#7a7a7a">fallback → {vault}/01 Inbox/{date}-{time}.md</div>
+          </div>
+          <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="cursor:pointer;background:#0066cc;color:#fff;font-size:14px;padding:11px 20px;border-radius:9999px;white-space:nowrap">Edit rule</span>
+            <span style="cursor:pointer;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:11px 18px;border-radius:11px;white-space:nowrap">Dry run</span>
+          </div>
+        </div>
+
+        <div style="background:#ffffff;border:1px solid #e0e0e0;border-radius:18px;padding:26px">
+          <div style="font-size:21px;font-weight:600;letter-spacing:0.231px">Frontmatter</div>
+          <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#333333">Written at the top of every note, so Dataview queries work in Obsidian.</p>
+          <div class="mono" style="margin-top:18px;padding:16px;border-radius:11px;background:#272729;color:#cccccc;font-size:12px;line-height:1.9">
+            <div>date: 2026-04-06</div>
+            <div>block: 09:00–10:50</div>
+            <div>course: Organic Chemistry</div>
+            <div>duration: 47m</div>
+            <div>source: brick</div>
+            <div>confidence: 0.96</div>
+            <div>tags: [chem, lecture]</div>
+          </div>
+          <div style="margin-top:18px;font-size:14px;color:#0066cc;cursor:pointer">Add a field</div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onMobile }}">
+  <div>
+    <section style="padding:56px 32px 72px;background:#f5f5f7">
+      <div style="max-width:1180px;margin:0 auto">
+        <h1 style="margin:0;font-size:40px;font-weight:600;line-height:1.1">On a phone</h1>
+        <p style="margin:12px 0 0;max-width:620px;font-size:17px;line-height:1.47;letter-spacing:-0.374px;color:#333333">Recording happens in a lecture hall, so these two screens are the ones that must work one-handed. Everything else can stay desktop-only for now.</p>
+
+        <div style="margin-top:36px;display:flex;gap:32px;flex-wrap:wrap">
+
+          <div style="width:390px;background:#ffffff;border:1px solid #e0e0e0;border-radius:36px;overflow:hidden">
+            <div style="height:44px;background:#000000;color:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px">
+              <span>9:41</span><span style="display:flex;align-items:center;gap:8px"><span style="width:6px;height:6px;border-radius:9999px;background:#2997ff"></span>Brick</span>
+            </div>
+            <div style="padding:24px 20px 20px">
+              <div style="font-size:12px;color:#7a7a7a">FILES INTO</div>
+              <div style="margin-top:6px;font-size:21px;font-weight:600;letter-spacing:0.231px">Seminar prep · 09:00</div>
+              <div style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:4px;height:80px">{{ mobileWave }}</div>
+              <div class="mono" style="margin-top:12px;text-align:center;font-size:34px;letter-spacing:-0.374px">06:14</div>
+              <div style="margin-top:26px;display:flex;flex-direction:column;gap:12px">
+                <div onClick="{{ addMark }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:18px;font-weight:300;padding:20px;border-radius:9999px;text-align:center">Mark this moment</div>
+                <div style="display:flex;gap:12px">
+                  <div style="flex:1;background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:16px;border-radius:11px;text-align:center">Pause</div>
+                  <div onClick="{{ stopRec }}" style="flex:1;background:#f5f5f7;color:#1d1d1f;font-size:14px;padding:16px;border-radius:11px;text-align:center">Stop</div>
+                </div>
+              </div>
+              <div style="margin-top:22px;padding-top:18px;border-top:1px solid #f0f0f0">
+                <div style="font-size:12px;color:#7a7a7a">MARKS</div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;color:#0066cc">05:31</span><span style="font-size:14px;color:#333333">exam hint</span></div>
+                  <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;color:#0066cc">02:08</span><span style="font-size:14px;color:#333333">definition</span></div>
+                </div>
+              </div>
+              <div style="margin-top:20px;font-size:12px;color:#7a7a7a;line-height:1.6">Transcript keeps running in the background. Screen off is fine.</div>
+            </div>
+          </div>
+
+          <div style="width:390px;background:#ffffff;border:1px solid #e0e0e0;border-radius:36px;overflow:hidden">
+            <div style="height:44px;background:#000000;color:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px">
+              <span>13:02</span><span>Meleta</span>
+            </div>
+            <div style="padding:22px 20px 24px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:12px;color:#7a7a7a">WED 8 APRIL</span>
+                <span style="font-size:14px;color:#0066cc">Week</span>
+              </div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+                <div style="background:rgba(0,102,204,.12);border-left:3px solid #0066cc;border-radius:8px;padding:12px 14px">
+                  <div style="display:flex;align-items:center;gap:7px"><span style="width:6px;height:6px;border-radius:9999px;background:#0066cc"></span><span style="font-size:14px;font-weight:600">Seminar prep</span></div>
+                  <div style="margin-top:3px;font-size:12px;color:#333333">09:00 – 10:00</div>
+                </div>
+                <div style="background:#ffffff;border:2px solid #0071e3;border-left:3px solid #0066cc;border-radius:8px;padding:12px 14px">
+                  <div style="font-size:14px;font-weight:600">Organic Chemistry</div>
+                  <div style="margin-top:3px;font-size:12px;color:#333333">14:00 – 15:50</div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px;border-top:1px solid #f0f0f0;padding-top:20px">
+                <div style="font-size:12px;color:#7a7a7a">BLOCK</div>
+                <div style="margin-top:6px;font-size:21px;font-weight:600;letter-spacing:0.231px">Organic Chemistry</div>
+                <div style="margin-top:4px;font-size:14px;color:#333333">14:00 – 15:50 · Hall B</div>
+                <div style="margin-top:16px;border:1px dashed #d2d2d7;border-radius:11px;padding:18px;text-align:center;font-size:14px;color:#7a7a7a">No note yet</div>
+                <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px">
+                  <div onClick="{{ startRec }}" style="cursor:pointer;background:#0066cc;color:#fff;font-size:17px;padding:18px;border-radius:9999px;text-align:center">Record into this block</div>
+                  <div style="background:#fafafc;border:1px solid #f0f0f0;color:#333333;font-size:14px;padding:16px;border-radius:11px;text-align:center">Attach a capture</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <div style="background:#f5f5f7;border-top:1px solid #e0e0e0;padding:44px 32px">
+    <div style="max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;font-size:12px;letter-spacing:-0.12px;color:#7a7a7a">
+      <span>meleta.study — notes that file themselves.</span>
+      <span>Whisper v3-turbo · DeepSeek · Supabase · Obsidian</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { screen: "record", recording: false, secs: 374, source: "brick", pop: null, marks: [{ t: "05:31", label: "exam hint" }, { t: "02:08", label: "definition" }] };
+
+  componentWillUnmount() { clearInterval(this.t); }
+
+  tick() {
+    clearInterval(this.t);
+    this.t = setInterval(() => this.setState(s => ({ secs: s.secs + 1 })), 1000);
+  }
+
+  fmt(n) {
+    const m = String(Math.floor(n / 60)).padStart(2, "0");
+    return m + ":" + String(n % 60).padStart(2, "0");
+  }
+
+  bars(count, h, live, seed, color) {
+    return Array.from({ length: count }, (_, i) => {
+      const base = 0.22 + 0.78 * Math.abs(Math.sin((i + 1) * (seed || 1.7)));
+      return React.createElement("span", {
+        key: i,
+        style: {
+          display: "block", width: 4, borderRadius: 9999,
+          background: color || (live ? "#0066cc" : "#d2d2d7"),
+          height: Math.max(4, Math.round(h * base)),
+          transformOrigin: "center",
+          animation: live ? `ml-wave 1.1s ease-in-out ${(i % 9) * 0.09}s infinite` : "none"
+        }
+      });
+    });
+  }
+
+  renderVals() {
+    const sc = this.state.screen, rec = this.state.recording;
+    const marks = this.state.marks;
+    return {
+      onRecord: sc === "record", onCalendar: sc === "calendar", onNotes: sc === "notes",
+      onSearch: sc === "search", onDetail: sc === "detail", onVault: sc === "vault", onMobile: sc === "mobile",
+      goRecord: () => this.setState({ screen: "record", pop: null }),
+      goCalendar: () => this.setState({ screen: "calendar", pop: null }),
+      goNotes: () => this.setState({ screen: "notes", pop: null }),
+      goSearch: () => this.setState({ screen: "search", pop: null }),
+      goDetail: () => this.setState({ screen: "detail", pop: null }),
+      goVault: () => this.setState({ screen: "vault", pop: null }),
+      goMobile: () => this.setState({ screen: "mobile", pop: null }),
+      toggleMonth: () => {},
+      idle: !rec, recording: rec,
+      startRec: () => { this.setState({ screen: "record", recording: true, pop: null }); this.tick(); },
+      stopRec: () => { clearInterval(this.t); this.setState({ recording: false, screen: "detail" }); },
+      elapsed: this.fmt(this.state.secs),
+      isBrick: this.state.source === "brick", isMic: this.state.source === "mic",
+      setBrick: () => this.setState({ source: "brick" }),
+      setMic: () => this.setState({ source: "mic" }),
+      addMark: () => this.setState(s => ({ marks: [{ t: this.fmt(s.secs), label: "marked" }].concat(s.marks) })),
+      markCount: marks.length,
+      markList: marks.map((m, i) => React.createElement("div", {
+        key: i,
+        style: { display: "flex", gap: 12, alignItems: "baseline", padding: "10px 12px", border: "1px solid #e0e0e0", borderRadius: 11 }
+      }, [
+        React.createElement("span", { key: "t", className: "mono", style: { fontSize: 12, color: "#0066cc" } }, m.t),
+        React.createElement("span", { key: "l", style: { fontSize: 14, color: "#333333" } }, m.label)
+      ])),
+      popOpen: this.state.pop !== null,
+      popNote: this.state.pop === "note", popEmpty: this.state.pop === "empty", popNew: this.state.pop === "new",
+      openNote: () => this.setState({ pop: "note" }), openEmpty: () => this.setState({ pop: "empty" }),
+      openNew: () => this.setState({ pop: "new" }), closePop: () => this.setState({ pop: null }),
+      liveWave: this.bars(26, 30, true, 1.7),
+      idleWave: this.bars(30, 28, true, 2.3, "#d2d2d7"),
+      mobileWave: this.bars(30, 76, true, 1.4),
+      miniWave: this.bars(28, 72, false, 1.3),
+      miniWave2: this.bars(28, 72, false, 2.1)
+    };
+  }
+}
+</script>
+</body>
+</html>

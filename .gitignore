@@ -1,0 +1,36 @@
+# Runtime secrets and local application data
+.data/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencies and package-manager state
+node_modules/
+.npm/
+.pnpm-store/
+
+# Logs, coverage, and generated output
+*.log
+coverage/
+dist/
+build/
+.cache/
+.tmp/
+tmp/
+
+# Local tooling and operating-system files
+.DS_Store
+Thumbs.db
+.thumbnail
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Workspace-only agent metadata
+.agents/
+.codex/

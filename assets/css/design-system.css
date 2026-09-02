@@ -1,0 +1,59 @@
+/* Generated from DESIGN.md. Keep this file and DESIGN.md in sync. */
+@font-face{font-family:Inter;src:url("../fonts/inter/Inter-Light.ttf") format("truetype");font-style:normal;font-weight:300;font-display:swap}
+@font-face{font-family:Inter;src:url("../fonts/inter/Inter-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Inter;src:url("../fonts/inter/Inter-SemiBold.ttf") format("truetype");font-style:normal;font-weight:600;font-display:swap}
+@font-face{font-family:Inter;src:url("../fonts/inter/Inter-Bold.ttf") format("truetype");font-style:normal;font-weight:700;font-display:swap}
+
+:root{
+  /* Color */
+  --color-brand-mustard:#d9a439;--color-primary:#9a6800;--color-primary-focus:#6f4b00;--color-primary-on-dark:#e2ad43;
+  --color-ink:#1d1d1f;--color-body:#1d1d1f;--color-body-on-dark:#fff;--color-body-muted:#ccc;
+  --color-ink-muted-80:#333;--color-ink-muted-48:#7a7a7a;--color-divider-soft:#f0f0f0;--color-hairline:#e0e0e0;
+  --color-canvas:#fff;--color-canvas-parchment:#f5f5f7;--color-surface-pearl:#fafafc;
+  --color-surface-tile-1:#272729;--color-surface-tile-2:#2a2a2c;--color-surface-tile-3:#252527;
+  --color-surface-black:#000;--color-surface-chip-translucent:rgba(210,210,215,.64);--color-on-primary:#fff;--color-on-dark:#fff;
+
+  /* Font families. SF Pro is used when installed; bundled Inter is the cross-platform fallback. */
+  --font-text:"SF Pro Text",Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-display:"SF Pro Display",Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+
+  /* Type scale */
+  --type-hero-size:56px;--type-hero-line:1.07;--type-hero-track:-.28px;
+  --type-display-lg-size:40px;--type-display-lg-line:1.1;
+  --type-display-md-size:34px;--type-display-md-line:1.47;--type-display-md-track:-.374px;
+  --type-lead-size:28px;--type-lead-line:1.14;--type-lead-track:.196px;
+  --type-lead-airy-size:24px;--type-lead-airy-line:1.5;
+  --type-tagline-size:21px;--type-tagline-line:1.19;--type-tagline-track:.231px;
+  --type-body-size:17px;--type-body-line:1.47;--type-body-track:-.374px;
+  --type-caption-size:14px;--type-caption-line:1.43;--type-caption-track:-.224px;
+  --type-fine-size:12px;--type-fine-line:1;--type-fine-track:-.12px;
+  --type-micro-size:10px;--type-micro-line:1.3;--type-micro-track:-.08px;
+
+  /* Shape and spacing */
+  --radius-none:0;--radius-xs:5px;--radius-sm:8px;--radius-md:11px;--radius-lg:18px;--radius-pill:9999px;--radius-full:9999px;
+  --space-xxs:4px;--space-xs:8px;--space-sm:12px;--space-md:17px;--space-lg:24px;--space-xl:32px;--space-xxl:48px;--space-section:80px;
+  --content-text:980px;--content-grid:1440px;--grid-gutter:24px;
+  --shadow-product:3px 5px 30px 0 rgba(0,0,0,.22);--drop-shadow-product:3px 5px 30px rgba(0,0,0,.22);--border-soft:1px solid rgba(0,0,0,.08);
+
+  /* Backwards-compatible aliases used by the current application. */
+  --blue:var(--color-primary);--blue-focus:var(--color-primary-focus);--ink:var(--color-ink);--soft:var(--color-ink-muted-80);
+  --muted:var(--color-ink-muted-48);--canvas:var(--color-canvas);--parchment:var(--color-canvas-parchment);
+  --pearl:var(--color-surface-pearl);--hairline:var(--color-hairline);--font:var(--font-text);--display:var(--font-display);
+}
+
+/* Reusable design-system primitives for new UI. */
+.type-hero{font:600 var(--type-hero-size)/var(--type-hero-line) var(--font-display);letter-spacing:var(--type-hero-track)}
+.type-display-lg{font:600 var(--type-display-lg-size)/var(--type-display-lg-line) var(--font-display)}
+.type-lead{font:400 var(--type-lead-size)/var(--type-lead-line) var(--font-display);letter-spacing:var(--type-lead-track)}
+.type-lead-airy{font:300 var(--type-lead-airy-size)/var(--type-lead-airy-line) var(--font-text)}
+.surface-light,.surface-parchment,.surface-dark{padding-block:var(--space-section);border-radius:var(--radius-none)}
+.surface-light{background:var(--color-canvas);color:var(--color-ink)}
+.surface-parchment{background:var(--color-canvas-parchment);color:var(--color-ink)}
+.surface-dark{background:var(--color-surface-tile-1);color:var(--color-on-dark)}
+.product-image{filter:drop-shadow(var(--drop-shadow-product))}
+.text-link-on-dark{color:var(--color-primary-on-dark)}
+.button-store{padding:14px 28px;border-radius:var(--radius-pill);background:var(--color-primary);color:var(--color-on-primary);font:300 18px/1 var(--font-text)}
+.button-pearl{padding:8px 14px;border:3px solid var(--color-divider-soft);border-radius:var(--radius-md);background:var(--color-surface-pearl);color:var(--color-ink-muted-80);font:400 14px/1.43 var(--font-text)}
+.utility-card{padding:var(--space-lg);border:1px solid var(--color-hairline);border-radius:var(--radius-lg);background:var(--color-canvas)}
+
+@media(max-width:734px){:root{--space-section:48px;--type-hero-size:40px;--type-display-lg-size:32px}}
