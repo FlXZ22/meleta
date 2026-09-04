@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check assets/js/app.js && node --check assets/js/calendar.js && node --check assets/js/db.js && node --check assets/js/recorder.js && node --check assets/js/transcriber.js"
+    "check": "node --check server.mjs && node --check assets/js/app.js && node --check assets/js/calendar.js && node --check assets/js/db.js && node --check assets/js/recorder.js && node --check assets/js/transcriber.js && node --check assets/js/i18n.js && node --check assets/js/audio-split.js && node --check assets/js/text-split.js && node --check assets/js/level-worklet.js"
   },
   "engines": {
     "node": ">=22"

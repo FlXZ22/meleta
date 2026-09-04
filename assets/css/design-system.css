@@ -1,59 +1,67 @@
-/* Generated from DESIGN.md. Keep this file and DESIGN.md in sync. */
+/* Meleta design system — the single source of truth for tokens.
+   One font, one type scale, one spacing scale, one radius family, one accent.
+   Accent is the Meleta lemon gold from the logo. */
+
 @font-face{font-family:Inter;src:url("../fonts/inter/Inter-Light.ttf") format("truetype");font-style:normal;font-weight:300;font-display:swap}
 @font-face{font-family:Inter;src:url("../fonts/inter/Inter-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
 @font-face{font-family:Inter;src:url("../fonts/inter/Inter-SemiBold.ttf") format("truetype");font-style:normal;font-weight:600;font-display:swap}
 @font-face{font-family:Inter;src:url("../fonts/inter/Inter-Bold.ttf") format("truetype");font-style:normal;font-weight:700;font-display:swap}
 
 :root{
-  /* Color */
-  --color-brand-mustard:#d9a439;--color-primary:#9a6800;--color-primary-focus:#6f4b00;--color-primary-on-dark:#e2ad43;
-  --color-ink:#1d1d1f;--color-body:#1d1d1f;--color-body-on-dark:#fff;--color-body-muted:#ccc;
-  --color-ink-muted-80:#333;--color-ink-muted-48:#7a7a7a;--color-divider-soft:#f0f0f0;--color-hairline:#e0e0e0;
-  --color-canvas:#fff;--color-canvas-parchment:#f5f5f7;--color-surface-pearl:#fafafc;
-  --color-surface-tile-1:#272729;--color-surface-tile-2:#2a2a2c;--color-surface-tile-3:#252527;
-  --color-surface-black:#000;--color-surface-chip-translucent:rgba(210,210,215,.64);--color-on-primary:#fff;--color-on-dark:#fff;
+  /* Accent — the Meleta gold, sampled from the logo mark (#d9a43a).
+     `accent` fills surfaces and marks; `accent-ink` is the text-safe tone
+     (5.5:1 on white) used whenever the accent has to be read as words. */
+  --c-accent:#d9a43a;--c-accent-hover:#c8942f;--c-accent-active:#b58324;
+  --c-accent-ink:#8a6212;--c-accent-focus:#8a6212;
+  --c-accent-subtle:#faf3e4;--c-accent-on-dark:#e6b658;
 
-  /* Font families. SF Pro is used when installed; bundled Inter is the cross-platform fallback. */
-  --font-text:"SF Pro Text",Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  --font-display:"SF Pro Display",Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  /* Ink */
+  --c-ink:#1b1b1b;--c-ink-secondary:#5a5a5c;--c-ink-tertiary:#8a8a8e;--c-ink-disabled:#b8b8bc;
 
-  /* Type scale */
-  --type-hero-size:56px;--type-hero-line:1.07;--type-hero-track:-.28px;
-  --type-display-lg-size:40px;--type-display-lg-line:1.1;
-  --type-display-md-size:34px;--type-display-md-line:1.47;--type-display-md-track:-.374px;
-  --type-lead-size:28px;--type-lead-line:1.14;--type-lead-track:.196px;
-  --type-lead-airy-size:24px;--type-lead-airy-line:1.5;
-  --type-tagline-size:21px;--type-tagline-line:1.19;--type-tagline-track:.231px;
-  --type-body-size:17px;--type-body-line:1.47;--type-body-track:-.374px;
-  --type-caption-size:14px;--type-caption-line:1.43;--type-caption-track:-.224px;
-  --type-fine-size:12px;--type-fine-line:1;--type-fine-track:-.12px;
-  --type-micro-size:10px;--type-micro-line:1.3;--type-micro-track:-.08px;
+  /* Surfaces — white canvas, one barely-there wash for hover/rest states */
+  --c-canvas:#fff;--c-raised:#fafaf9;--c-sunken:#f4f4f2;--c-overlay:rgba(0,0,0,.36);
 
-  /* Shape and spacing */
-  --radius-none:0;--radius-xs:5px;--radius-sm:8px;--radius-md:11px;--radius-lg:18px;--radius-pill:9999px;--radius-full:9999px;
-  --space-xxs:4px;--space-xs:8px;--space-sm:12px;--space-md:17px;--space-lg:24px;--space-xl:32px;--space-xxl:48px;--space-section:80px;
-  --content-text:980px;--content-grid:1440px;--grid-gutter:24px;
-  --shadow-product:3px 5px 30px 0 rgba(0,0,0,.22);--drop-shadow-product:3px 5px 30px rgba(0,0,0,.22);--border-soft:1px solid rgba(0,0,0,.08);
+  /* Hairlines — used for inputs and the calendar grid only, never as decoration */
+  --c-hairline:#e8e8e6;--c-border-strong:#c9c9c6;
 
-  /* Backwards-compatible aliases used by the current application. */
-  --blue:var(--color-primary);--blue-focus:var(--color-primary-focus);--ink:var(--color-ink);--soft:var(--color-ink-muted-80);
-  --muted:var(--color-ink-muted-48);--canvas:var(--color-canvas);--parchment:var(--color-canvas-parchment);
-  --pearl:var(--color-surface-pearl);--hairline:var(--color-hairline);--font:var(--font-text);--display:var(--font-display);
+  /* Semantic — status indicators only */
+  --c-success:#1a7f37;--c-success-bg:#eaf4ec;--c-warning:#8a6212;--c-warning-bg:#faf3e4;
+  --c-danger:#b3261e;--c-danger-bg:#fbeceb;--c-info:#8a6212;--c-info-bg:#faf3e4;--c-recording:#d1332a;
+
+  /* On-dark (kept for the toast, the only dark surface left) */
+  --c-dark-surface:#1b1b1b;--c-on-dark:#fff;--c-on-dark-secondary:#b8b8bc;--c-on-dark-hairline:rgba(255,255,255,.16);
+
+  /* Typography — one family across the whole app, no second display face and
+     no monospace; numerals line up through font-variant-numeric instead. */
+  --font:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;
+  --font-display:var(--font);
+
+  --t-display:600 32px/1.16 var(--font);--t-display-track:-.5px;
+  --t-title:600 24px/1.25 var(--font);--t-title-track:-.35px;
+  --t-headline:600 19px/1.3 var(--font);--t-headline-track:-.2px;
+  --t-body:400 16px/1.55 var(--font);
+  --t-callout:500 15px/1.45 var(--font);
+  --t-caption:400 13px/1.45 var(--font);
+  --t-overline:600 12px/1.35 var(--font);--t-overline-track:.4px;
+
+  /* Spacing — 4px base */
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;
+
+  /* Layout */
+  /* Three measures: prose is capped for readability, the app shell is wider so
+     lists and cards are not squeezed, and the calendar grid gets the most. */
+  --content-text:720px;--content-app:1040px;--content-wide:1240px;--gutter:20px;
+
+  /* Radius — one rounded family, nothing square */
+  --r-xs:8px;--r-sm:10px;--r-md:14px;--r-lg:20px;--r-pill:9999px;
+
+  /* Controls — every button in the app resolves to these three values */
+  --control-h:44px;--control-pad-y:11px;--control-pad-x:22px;
+
+  /* Elevation — none in UI chrome */
+  --e-0:none;--e-1:none;--e-2:none;--e-3:0 8px 28px rgba(0,0,0,.14);
+
 }
 
-/* Reusable design-system primitives for new UI. */
-.type-hero{font:600 var(--type-hero-size)/var(--type-hero-line) var(--font-display);letter-spacing:var(--type-hero-track)}
-.type-display-lg{font:600 var(--type-display-lg-size)/var(--type-display-lg-line) var(--font-display)}
-.type-lead{font:400 var(--type-lead-size)/var(--type-lead-line) var(--font-display);letter-spacing:var(--type-lead-track)}
-.type-lead-airy{font:300 var(--type-lead-airy-size)/var(--type-lead-airy-line) var(--font-text)}
-.surface-light,.surface-parchment,.surface-dark{padding-block:var(--space-section);border-radius:var(--radius-none)}
-.surface-light{background:var(--color-canvas);color:var(--color-ink)}
-.surface-parchment{background:var(--color-canvas-parchment);color:var(--color-ink)}
-.surface-dark{background:var(--color-surface-tile-1);color:var(--color-on-dark)}
-.product-image{filter:drop-shadow(var(--drop-shadow-product))}
-.text-link-on-dark{color:var(--color-primary-on-dark)}
-.button-store{padding:14px 28px;border-radius:var(--radius-pill);background:var(--color-primary);color:var(--color-on-primary);font:300 18px/1 var(--font-text)}
-.button-pearl{padding:8px 14px;border:3px solid var(--color-divider-soft);border-radius:var(--radius-md);background:var(--color-surface-pearl);color:var(--color-ink-muted-80);font:400 14px/1.43 var(--font-text)}
-.utility-card{padding:var(--space-lg);border:1px solid var(--color-hairline);border-radius:var(--radius-lg);background:var(--color-canvas)}
-
-@media(max-width:734px){:root{--space-section:48px;--type-hero-size:40px;--type-display-lg-size:32px}}
+@media(max-width:734px){:root{--t-display:600 27px/1.2 var(--font);--t-title:600 21px/1.28 var(--font);--gutter:16px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}

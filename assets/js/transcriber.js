@@ -1,9 +1,11 @@
+import { t } from "./i18n.js";
+
 export class LiveTranscriber extends EventTarget {
-  constructor() { super(); this.recognition = null; this.mode = "off"; this.settings = null; this.queue = Promise.resolve(); this.session = 0; }
-  emit(type, detail) { this.dispatchEvent(new CustomEvent(type, { detail })); }
+  constructor() { super(); this.recognition = null; this.mode = "off"; this.settings = null; this.queue = Promise.resolve(); this.session = 0; this.context = ""; }
+  emit(type, detail) { this.dispatchEvent(new CustomEvent(type, { detail: detail?.label ? { ...detail, label: t(detail.label) } : detail })); }
 
   start(settings) {
-    this.stop(); this.settings = settings; this.session += 1;
+    this.stop(); this.settings = settings; this.session += 1; this.context = "";
     if (!settings.livePreview) return this.emit("status", { mode: "off", label: "Anteprima disattivata" });
     if (settings.activeProvider) { this.mode = "provider"; return this.emit("status", { mode: this.mode, label: "Preparazione trascrizione live…" }); }
     this.startBrowserPreview(settings);
@@ -30,16 +32,20 @@ export class LiveTranscriber extends EventTarget {
     const session = this.session, settings = { ...this.settings };
     this.emit("status", { mode: "provider", label: "Trascrizione del segmento…" });
     this.queue = this.queue.then(async () => {
-      const query = new URLSearchParams({ provider: settings.activeProvider, mime: blob.type || "audio/wav", language: settings.inputLanguage || "auto", preview: "true" });
+      /* The tail of the previous chunk is sent as context so the model does not
+         restart cold at every 10-second boundary. */
+      const query = new URLSearchParams({ provider: settings.activeProvider, mime: blob.type || "audio/wav", language: settings.inputLanguage || "auto", preview: "true", ...(this.context ? { prompt: this.context } : {}) });
       const response = await fetch(`/api/transcribe?${query}`, { method: "POST", headers: { "Content-Type": blob.type || "audio/wav" }, body: blob });
       const payload = await response.json(); if (!response.ok) throw new Error(payload.error || "Anteprima non riuscita.");
       if (this.mode !== "provider" || this.session !== session) return;
-      this.emit("transcript", { finalText: payload.text?.trim() || "", interimText: "", source: settings.activeProvider });
+      const finalText = payload.text?.trim() || "";
+      if (finalText) this.context = `${this.context} ${finalText}`.trim().slice(-880);
+      this.emit("transcript", { finalText, interimText: "", source: settings.activeProvider, segments: payload.segments || [] });
       this.emit("status", { mode: "provider", label: `${payload.provider} · ${payload.model}` });
     }).catch((error) => { if (this.session === session && this.mode === "provider") this.emit("status", { mode: "error", label: error.message }); });
   }
 
   pause() { if (this.mode === "browser") { this.mode = "paused-browser"; this.recognition?.stop(); } else if (this.mode === "provider") this.mode = "paused-provider"; }
   resume(settings) { if (this.mode === "paused-browser") this.startBrowserPreview(settings); else if (this.mode === "paused-provider") { this.mode = "provider"; this.emit("status", { mode: "provider", label: "Trascrizione live attiva" }); } }
-  stop() { this.session += 1; this.mode = "off"; if (this.recognition) { this.recognition.onend = null; this.recognition.stop(); this.recognition = null; } }
+  stop() { this.session += 1; this.mode = "off"; this.context = ""; if (this.recognition) { this.recognition.onend = null; this.recognition.stop(); this.recognition = null; } }
 }

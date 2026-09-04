@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#d9a439" />
+    <meta name="theme-color" content="#d9a43a" />
     <meta name="description" content="Meleta registra le lezioni e le organizza in appunti chiari." />
     <title>Meleta</title>
     <link rel="preload" href="assets/fonts/inter/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin />
@@ -19,27 +19,41 @@
       <a class="brand" href="#/today" aria-label="Meleta, vai a Oggi"><img src="assets/images/brand/meleta-header.png" alt="Meleta" /></a>
       <nav class="primary-nav" aria-label="Navigazione principale">
         <a class="nav-link" href="#/today" data-nav="today">Oggi</a>
-        <a class="nav-link" href="#/library" data-nav="library">Raccolta</a>
-        <a class="nav-link" href="#/calendar" data-nav="calendar">Calendario</a>
+        <a class="nav-link" href="#/library" data-nav="library">Note</a>
+        <a class="nav-link" href="#/calendar" data-nav="calendar">Orario</a>
         <a class="nav-link nav-settings" href="#/settings" data-nav="settings" aria-label="Impostazioni">Impostazioni</a>
       </nav>
       <button class="button button-primary header-record" type="button" data-action="start-unassigned">Registra</button>
     </div></header>
 
+    <div class="global-rec-bar" id="global-rec-bar" role="status" aria-live="polite" hidden>
+      <span class="rec-live"><span class="rec-live-dot" aria-hidden="true"></span><span>REC</span> <time class="rec-timer" id="rec-bar-timer">0:00</time></span>
+      <span class="rec-subject" id="rec-bar-subject" data-no-translate></span>
+      <span class="rec-tools">
+        <button class="rec-tool" type="button" data-action="toggle-pause" id="rec-bar-pause" aria-label="Pausa o riprendi">❚❚</button>
+        <button class="rec-tool" type="button" data-action="stop-recording" aria-label="Termina e salva">■</button>
+        <button class="rec-tool rec-open" type="button" data-action="return-recording">Apri</button>
+      </span>
+    </div>
+
+    <div class="alert-banner" id="alert-banner" role="alert" hidden><p id="alert-text"></p><button class="icon-button" type="button" data-action="dismiss-alert" aria-label="Chiudi avviso">×</button></div>
+
     <main id="main" tabindex="-1">
       <section class="view page-shell" data-view="today" aria-labelledby="today-title">
-        <header class="page-heading"><p class="eyebrow" id="today-date"></p><h1 id="today-title">Pronto quando vuoi.</h1><p class="page-intro">Registra una lezione in un gesto. L’audio resta salvato in questo browser.</p></header>
+        <header class="page-heading today-heading"><p class="eyebrow" id="today-date"></p><h1 id="today-title">La tua prossima lezione.</h1></header>
         <div id="today-context"></div>
         <section id="recording-panel" class="recording-panel" aria-live="polite" hidden></section>
+        <section id="journey-status" class="journey-status" aria-live="polite" hidden></section>
+        <section id="today-inbox" class="content-section" hidden><div class="section-heading"><h2>Registrazioni da assegnare</h2><button class="text-link" type="button" data-action="open-inbox">Vedi tutte</button></div><div id="today-inbox-list" class="inbox-cards"></div></section>
         <section class="content-section" aria-labelledby="recent-title">
-          <div class="section-heading"><div><p class="eyebrow">Ultime attività</p><h2 id="recent-title">Registrazioni recenti</h2></div><a class="text-link" href="#/library">Apri la raccolta</a></div>
+          <div class="section-heading"><h2 id="recent-title">Registrazioni recenti</h2><a class="text-link" href="#/library">Vedi tutte le note</a></div>
           <div id="recent-list"></div>
         </section>
       </section>
 
       <section class="view page-shell" data-view="library" aria-labelledby="library-title" hidden>
-        <header class="page-heading"><p class="eyebrow">Tutto in un posto</p><h1 id="library-title">Raccolta</h1><p class="page-intro">Riascolta, rinomina e organizza le registrazioni.</p>
-          <label class="search-field"><span aria-hidden="true">⌕</span><span class="visually-hidden">Cerca nella raccolta</span><input id="library-search" type="search" placeholder="Cerca titolo o materia" autocomplete="off" /><kbd>⌘ K</kbd></label>
+        <header class="page-heading"><h1 id="library-title">Note</h1>
+          <label class="search-field"><span aria-hidden="true">⌕</span><span class="visually-hidden">Cerca nelle note</span><input id="library-search" type="search" placeholder="Cerca titolo, materia o testo" autocomplete="off" /><kbd>⌘ K</kbd></label>
         </header>
         <div class="filter-row" role="group" aria-label="Filtra registrazioni">
           <button class="filter-chip is-selected" type="button" data-filter="all" aria-pressed="true">Tutte</button>
@@ -50,42 +64,144 @@
       </section>
 
       <section class="view page-shell page-shell-wide" data-view="calendar" aria-labelledby="calendar-title" hidden>
-        <h1 id="calendar-title" class="visually-hidden">Calendario</h1>
+        <h1 id="calendar-title" class="visually-hidden">Orario</h1>
         <div id="calendar-root" class="cal"></div>
       </section>
 
-      <section class="view page-shell" data-view="recording" aria-labelledby="detail-title" hidden><a class="text-link back-link" href="#/library">‹ Raccolta</a><div id="recording-detail"></div></section>
+      <section class="view page-shell" data-view="recording" aria-labelledby="detail-title" hidden><a class="text-link back-link" href="#/library">‹ Note</a><div id="recording-detail"></div></section>
 
       <section class="view page-shell settings-view" data-view="settings" aria-labelledby="settings-title" hidden>
-        <header class="page-heading"><p class="eyebrow">Preferenze</p><h1 id="settings-title">Impostazioni</h1><p class="page-intro">Scegli come Meleta ascolta, trascrive e conserva le lezioni.</p></header>
+        <header class="page-heading"><h1 id="settings-title">Impostazioni</h1></header>
         <form id="settings-form" class="settings-form">
-          <section class="settings-section"><div class="settings-copy"><h2>Registrazione</h2><p>Controlla l’ingresso e l’anteprima mentre ascolti.</p></div><div class="settings-controls">
+          <section class="settings-section"><div class="settings-copy"><h2>Registrazione</h2></div><div class="settings-controls">
+            <label class="setting-field">Microfono<select name="audioDeviceId"><option value="">Predefinito del sistema</option></select></label>
             <label class="setting-row"><span><strong>Anteprima trascrizione</strong><small>Mostra le parole mentre registri.</small></span><input name="livePreview" type="checkbox" role="switch" /></label>
             <label class="setting-field">Lingua parlata<select name="inputLanguage"><option value="auto">Rilevamento automatico</option><option value="it-IT">Italiano</option><option value="en-US">English</option><option value="fr-FR">Français</option><option value="de-DE">Deutsch</option><option value="es-ES">Español</option></select></label>
           </div></section>
-          <section class="provider-settings" aria-labelledby="provider-title"><div class="provider-intro"><p class="eyebrow">Trascrizione AI</p><h2 id="provider-title">Scegli un provider</h2><p>La chiave viene verificata e cifrata dal server Meleta. Nel browser resta soltanto il nome del provider scelto.</p></div>
-            <div class="provider-list" role="list">
-              <button class="provider-option" type="button" role="listitem" data-provider="openai"><img src="assets/images/providers/openai.svg" alt="" /><span class="provider-name"><strong>OpenAI</strong><small>Whisper · Trascrizione completa</small></span><span class="provider-state" data-provider-state="openai">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
-              <button class="provider-option" type="button" role="listitem" data-provider="groq"><img src="assets/images/providers/groq.svg" alt="" /><span class="provider-name"><strong>Groq</strong><small>Whisper Large V3 · Veloce</small></span><span class="provider-state" data-provider-state="groq">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
-              <button class="provider-option" type="button" role="listitem" data-provider="openrouter"><img src="assets/images/providers/openrouter.svg" alt="" /><span class="provider-name"><strong>OpenRouter</strong><small>Whisper · Scelta modelli</small></span><span class="provider-state" data-provider-state="openrouter">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
-              <button class="provider-option" type="button" role="listitem" data-provider="deepgram"><img src="assets/images/providers/deepgram.svg" alt="" /><span class="provider-name"><strong>Deepgram</strong><small>Nova-3 · Trascrizione completa</small></span><span class="provider-state" data-provider-state="deepgram">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+          <section class="settings-section"><div class="settings-copy"><h2>Lingua dell’interfaccia</h2></div><div class="settings-controls">
+            <label class="setting-field">Lingua dell’interfaccia<select name="uiLanguage"><option value="it">Italiano</option><option value="en">English</option></select></label>
+          </div></section>
+          <details class="provider-block" data-provider-section="transcription">
+            <summary>
+              <span class="provider-block-title"><strong>Ascolto AI</strong><small data-field="summary">Nessun provider attivo</small></span>
+              <span class="provider-block-dot" data-field="summary-dot" aria-hidden="true"></span>
+              <span class="row-arrow" aria-hidden="true">›</span>
+            </summary>
+            <div class="provider-settings">
+              <p class="provider-lead">Trasforma l’audio della lezione in testo. La chiave viene verificata e cifrata dal server Meleta; nel browser resta soltanto il nome del provider scelto.</p>
+              <div class="provider-list" role="list">
+                <button class="provider-option" type="button" role="listitem" data-provider="openai"><img src="assets/images/providers/openai.svg" alt="" /><span class="provider-name"><strong>OpenAI</strong><small>Whisper · Trascrizione completa</small></span><span class="provider-state" data-provider-state="openai">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+                <button class="provider-option" type="button" role="listitem" data-provider="groq"><img src="assets/images/providers/groq.svg" alt="" /><span class="provider-name"><strong>Groq</strong><small>Whisper Large V3 · Veloce</small></span><span class="provider-state" data-provider-state="groq">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+                <button class="provider-option" type="button" role="listitem" data-provider="openrouter"><img src="assets/images/providers/openrouter.svg" alt="" /><span class="provider-name"><strong>OpenRouter</strong><small>Whisper · Scelta modelli</small></span><span class="provider-state" data-provider-state="openrouter">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+                <button class="provider-option" type="button" role="listitem" data-provider="deepgram"><img src="assets/images/providers/deepgram.svg" alt="" /><span class="provider-name"><strong>Deepgram</strong><small>Nova-3 · Trascrizione completa</small></span><span class="provider-state" data-provider-state="deepgram">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+              </div>
+              <div class="provider-config" data-provider-config hidden>
+                <div class="provider-config-heading">
+                  <img data-field="logo" src="" alt="" />
+                  <h3 data-field="title">Configura provider</h3>
+                  <button class="icon-button" type="button" data-action="close-provider" aria-label="Chiudi configurazione">×</button>
+                </div>
+                <ol class="provider-steps">
+                  <li class="provider-step" data-step="key">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">1</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Chiave API</strong>
+                      <p class="provider-step-hint" data-field="copy"></p>
+                      <a class="text-link" data-field="help" href="#" target="_blank" rel="noopener noreferrer">Dove trovo la chiave ↗</a>
+                      <div class="secret-input"><input data-field="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Incolla la chiave" /><button type="button" data-action="toggle-secret" aria-label="Mostra o nascondi la chiave">Mostra</button></div>
+                      <div class="provider-step-actions"><button class="button button-primary" type="button" data-action="connect-provider">Verifica chiave</button><button class="text-button danger-action" type="button" data-action="remove-provider" hidden>Rimuovi chiave</button></div>
+                      <p class="provider-step-note" data-field="feedback" role="status"></p>
+                    </div>
+                  </li>
+                  <li class="provider-step" data-step="model">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">2</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Modello</strong>
+                      <p class="provider-step-hint">Scegli un modello: viene attivato subito.</p>
+                      <label class="visually-hidden" data-field="model-label">Modello</label>
+                      <select class="select-field" data-field="model"><option value="">Scegli un modello…</option></select>
+                      <p class="provider-step-note" data-field="model-feedback" role="status"></p>
+                    </div>
+                  </li>
+                  <li class="provider-step" data-step="done">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">3</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Pronto</strong>
+                      <p class="provider-step-hint" data-field="done-hint">Il provider è attivo per questa funzione.</p>
+                      <button class="button button-primary" type="button" data-action="activate-provider" hidden>Usa questo provider</button>
+                    </div>
+                  </li>
+                </ol>
+              </div>
             </div>
-            <div class="provider-config" id="provider-config" hidden><div class="provider-config-heading"><button class="icon-button" type="button" data-action="close-provider" aria-label="Chiudi configurazione">×</button><div><p class="eyebrow">Connessione sicura</p><h3 id="provider-config-title">Configura provider</h3></div></div><p id="provider-config-copy" class="provider-config-copy"></p><a id="provider-help-link" class="text-link" href="#" target="_blank" rel="noopener noreferrer">Crea o trova la chiave API ↗</a><label class="setting-field provider-key-field">Chiave API<div class="secret-input"><input id="provider-api-key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Incolla la chiave" /><button type="button" data-action="toggle-secret" aria-label="Mostra o nascondi la chiave">Mostra</button></div></label><p class="security-note"><span aria-hidden="true">⌁</span><span><strong>Conservata sul server.</strong> Cifratura AES-256-GCM; la chiave non viene salvata nel browser e non viene mai mostrata di nuovo.</span></p><div class="provider-config-actions"><button class="text-button danger-action" type="button" data-action="remove-provider" hidden>Rimuovi</button><span></span><button class="button button-primary" type="button" data-action="connect-provider">Verifica e salva</button></div><p id="provider-feedback" class="provider-feedback" role="status"></p><section class="model-picker" id="model-picker" hidden><div class="model-picker-heading"><p class="eyebrow">Modello</p><h4>Scegli cosa usare</h4><p>Nessun modello viene selezionato automaticamente.</p></div><label class="setting-field">Modelli di trascrizione disponibili<select id="provider-model"><option value="">Scegli un modello…</option></select></label><button class="button button-primary" type="button" data-action="save-provider-model">Salva modello</button><p id="model-feedback" class="provider-feedback" role="status"></p></section></div>
-          </section>
+          </details>
+          <details class="provider-block" data-provider-section="note">
+            <summary>
+              <span class="provider-block-title"><strong>Nota AI</strong><small data-field="summary">Nessun provider attivo</small></span>
+              <span class="provider-block-dot" data-field="summary-dot" aria-hidden="true"></span>
+              <span class="row-arrow" aria-hidden="true">›</span>
+            </summary>
+            <div class="provider-settings">
+              <p class="provider-lead">Rifinisce la trascrizione e propone un titolo. La chiave viene verificata e cifrata dal server Meleta; nel browser resta soltanto il nome del provider scelto.</p>
+              <div class="provider-list" role="list">
+                <button class="provider-option" type="button" role="listitem" data-provider="openrouter"><img src="assets/images/providers/openrouter.svg" alt="" /><span class="provider-name"><strong>OpenRouter</strong><small>Catalogo modelli di testo</small></span><span class="provider-state" data-provider-state="openrouter">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+                <button class="provider-option" type="button" role="listitem" data-provider="deepseek"><img src="assets/images/providers/deepseek.svg" alt="" /><span class="provider-name"><strong>DeepSeek</strong><small>deepseek-chat · Economico</small></span><span class="provider-state" data-provider-state="deepseek">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+                <button class="provider-option" type="button" role="listitem" data-provider="groq"><img src="assets/images/providers/groq.svg" alt="" /><span class="provider-name"><strong>Groq</strong><small>Llama · Molto veloce</small></span><span class="provider-state" data-provider-state="groq">Configura</span><span class="row-arrow" aria-hidden="true">›</span></button>
+              </div>
+              <div class="provider-config" data-provider-config hidden>
+                <div class="provider-config-heading">
+                  <img data-field="logo" src="" alt="" />
+                  <h3 data-field="title">Configura provider</h3>
+                  <button class="icon-button" type="button" data-action="close-provider" aria-label="Chiudi configurazione">×</button>
+                </div>
+                <ol class="provider-steps">
+                  <li class="provider-step" data-step="key">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">1</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Chiave API</strong>
+                      <p class="provider-step-hint" data-field="copy"></p>
+                      <a class="text-link" data-field="help" href="#" target="_blank" rel="noopener noreferrer">Dove trovo la chiave ↗</a>
+                      <div class="secret-input"><input data-field="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Incolla la chiave" /><button type="button" data-action="toggle-secret" aria-label="Mostra o nascondi la chiave">Mostra</button></div>
+                      <div class="provider-step-actions"><button class="button button-primary" type="button" data-action="connect-provider">Verifica chiave</button><button class="text-button danger-action" type="button" data-action="remove-provider" hidden>Rimuovi chiave</button></div>
+                      <p class="provider-step-note" data-field="feedback" role="status"></p>
+                    </div>
+                  </li>
+                  <li class="provider-step" data-step="model">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">2</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Modello</strong>
+                      <p class="provider-step-hint">Scegli un modello: viene attivato subito.</p>
+                      <label class="visually-hidden" data-field="model-label">Modello</label>
+                      <select class="select-field" data-field="model"><option value="">Scegli un modello…</option></select>
+                      <p class="provider-step-note" data-field="model-feedback" role="status"></p>
+                    </div>
+                  </li>
+                  <li class="provider-step" data-step="done">
+                    <span class="provider-step-mark" aria-hidden="true"><i class="provider-step-number">3</i><svg class="provider-step-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div class="provider-step-body">
+                      <strong class="provider-step-title">Pronto</strong>
+                      <p class="provider-step-hint" data-field="done-hint">Il provider è attivo per questa funzione.</p>
+                      <button class="button button-primary" type="button" data-action="activate-provider" hidden>Usa questo provider</button>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </details>
           <section class="settings-section"><div class="settings-copy"><h2>Dati locali</h2><p>Audio e calendario sono salvati soltanto in questo browser.</p></div><div class="settings-controls"><button class="button button-secondary danger-action" type="button" data-action="delete-all-data">Elimina tutti i dati</button></div></section>
           <div class="settings-save"><span id="settings-status" role="status"></span><button class="button button-primary" type="submit">Salva impostazioni</button></div>
         </form>
       </section>
     </main>
 
+    <nav class="tab-bar" aria-label="Navigazione">
+      <a class="tab-link" href="#/today" data-nav="today"><span class="tab-ico" aria-hidden="true">◉</span><span class="tab-label">Oggi</span></a>
+      <a class="tab-link" href="#/library" data-nav="library"><span class="tab-ico" aria-hidden="true">≣</span><span class="tab-label">Note</span></a>
+      <a class="tab-link" href="#/calendar" data-nav="calendar"><span class="tab-ico" aria-hidden="true">▦</span><span class="tab-label">Orario</span></a>
+      <a class="tab-link" href="#/settings" data-nav="settings"><span class="tab-ico" aria-hidden="true">⚙</span><span class="tab-label">Impostazioni</span></a>
+    </nav>
+
     <div class="toast" role="status" aria-live="polite" hidden></div>
-
-    <footer class="app-footer">
-      <div class="footer-top"><p>Le lezioni passano.<br />Le idee restano.</p><nav aria-label="Navigazione piè di pagina"><a href="#/today">Oggi</a><a href="#/library">Raccolta</a><a href="#/calendar">Calendario</a><a href="#/settings">Impostazioni</a></nav></div>
-      <img class="footer-wordmark" src="assets/images/brand/meleta-footer.png" alt="Meleta" />
-      <div class="footer-meta"><span>Meleta · Appunti intelligenti per studenti</span><span>Audio e note restano sotto il tuo controllo.</span></div>
-    </footer>
-
 
   </body>
 </html>

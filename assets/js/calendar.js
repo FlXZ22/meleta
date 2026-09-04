@@ -1,11 +1,14 @@
+import { getLocale, localeCode, t } from "./i18n.js";
+
 /* Maleta — Calendario
  * Week / day / month time grid with drag-to-create, drag-to-move, edge resize,
  * weekly recurrence with per-occurrence exceptions, tags and subject colours.
  *
- * Visual system follows DESIGN.md: Action Blue is the only interactive accent,
- * white and parchment surfaces, hairline rules, no shadows on chrome. Subject
- * colours are a muted identity palette and never carry meaning alone — every
- * block also states its status in words, as info.md requires.
+ * Visual system follows design-system.css: the Meleta gold is the only
+ * interactive accent, white surfaces, hairline rules only where the grid needs
+ * them, no shadows on chrome. Subject colours are a muted identity palette and
+ * never carry meaning alone — every block also states its status in words, as
+ * info.md requires.
  */
 
 const STEP_MINUTES = 15;
@@ -15,7 +18,7 @@ const DAY_MINUTES = 1440;
 const DRAG_THRESHOLD = 4;
 
 export const EVENT_COLORS = [
-  { id: "blu", label: "Azzurro" },
+  { id: "blu", label: "Miele" },
   { id: "salvia", label: "Salvia" },
   { id: "ardesia", label: "Ardesia" },
   { id: "pino", label: "Pino" },
@@ -29,9 +32,9 @@ const COLOR_IDS = EVENT_COLORS.map((color) => color.id);
 /* Stored weekdays keep the JavaScript convention (0 = domenica) so the rest of
    the application keeps reading them unchanged. Display order is Monday-first. */
 const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
-const WEEKDAY_SHORT = ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
-const WEEKDAY_INITIAL = ["D", "L", "M", "M", "G", "V", "S"];
-const WEEKDAY_LONG = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
+const WEEKDAY_SHORT = getLocale() === "en" ? ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] : ["dom", "lun", "mar", "mer", "gio", "ven", "sab"];
+const WEEKDAY_INITIAL = getLocale() === "en" ? ["S", "M", "T", "W", "T", "F", "S"] : ["D", "L", "M", "M", "G", "V", "S"];
+const WEEKDAY_LONG = getLocale() === "en" ? ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] : ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
 
 const state = {
   view: "week",
@@ -97,11 +100,11 @@ function snap(value) {
 }
 
 function formatDate(date, options) {
-  return new Intl.DateTimeFormat("it-IT", options).format(date);
+  return new Intl.DateTimeFormat(localeCode(), options).format(date);
 }
 
 function capitalise(value) {
-  return value.charAt(0).toLocaleUpperCase("it") + value.slice(1);
+  return value.charAt(0).toLocaleUpperCase(localeCode()) + value.slice(1);
 }
 
 function escapeHtml(value = "") {
@@ -245,11 +248,27 @@ export function currentOrNextOccurrence(reference = new Date()) {
   if (!list.length) return null;
   const nowMinutes = reference.getHours() * 60 + reference.getMinutes();
   const today = startOfDay(reference);
-  const horizon = occurrencesBetween(list, today, addDays(today, 120));
-  const active = horizon.find((item) => daysBetween(item.date, reference) === 0 && item.startMinutes <= nowMinutes && item.endMinutes > nowMinutes);
-  if (active) return { occurrence: active, active: true };
-  const next = horizon.find((item) => item.date > today || (daysBetween(item.date, reference) === 0 && item.startMinutes > nowMinutes));
-  return next ? { occurrence: next, active: false } : null;
+  /* Walks forward a day at a time and stops at the first hit. Building and
+     sorting a 120-day horizon just to read its first element made this the most
+     expensive thing on the Oggi screen. */
+  for (let offset = 0; offset <= 120; offset += 1) {
+    const day = addDays(today, offset);
+    const dayOccurrences = [];
+    for (const event of list) {
+      const occurrence = occurrenceFor(event, day);
+      if (occurrence) dayOccurrences.push(occurrence);
+    }
+    dayOccurrences.sort((a, b) => a.startMinutes - b.startMinutes);
+    if (offset === 0) {
+      const active = dayOccurrences.find((item) => item.startMinutes <= nowMinutes && item.endMinutes > nowMinutes);
+      if (active) return { occurrence: active, active: true };
+      const later = dayOccurrences.find((item) => item.startMinutes > nowMinutes);
+      if (later) return { occurrence: later, active: false };
+    } else if (dayOccurrences.length) {
+      return { occurrence: dayOccurrences[0], active: false };
+    }
+  }
+  return null;
 }
 
 /* ------------------------------------------------------------- persistence */
@@ -357,11 +376,11 @@ function eventHtml(occurrence, hour) {
   const left = (occurrence.column || 0) * width;
   const compact = height < 46 ? " is-compact" : "";
   const meta = [occurrence.room, occurrence.professor].filter(Boolean).join(" · ");
-  const label = `${occurrence.subject || "Lezione"}, ${occurrence.startTime}–${occurrence.endTime}${status ? `, ${status.label}` : ""}`;
+  const label = `${occurrence.subject || t("Lezione")}, ${occurrence.startTime}–${occurrence.endTime}${status ? `, ${status.label}` : ""}`;
   return `<button class="cal-event${compact}" type="button" data-occurrence="${escapeHtml(occurrence.id)}" data-color="${occurrence.color}"
     style="top:${top}px;height:${height}px;left:${left}%;width:${width}%" aria-label="${escapeHtml(label)}">
     <span class="cal-event-body">
-      <span class="cal-event-title">${escapeHtml(occurrence.subject || "Lezione")}</span>
+      <span class="cal-event-title" data-no-translate>${escapeHtml(occurrence.subject || t("Lezione"))}</span>
       <span class="cal-event-time">${escapeHtml(occurrence.startTime)}–${escapeHtml(occurrence.endTime)}</span>
       ${meta && height >= 74 ? `<span class="cal-event-meta">${escapeHtml(meta)}</span>` : ""}
       ${status && height >= 58 ? `<span class="cal-event-status" data-tone="${status.tone}"><i aria-hidden="true"></i>${escapeHtml(status.label)}</span>` : ""}
@@ -386,7 +405,7 @@ function timeGridHtml(days) {
   const heads = days.map((day) => {
     const key = dateKey(day);
     return `<button class="cal-head-day${key === todayKey ? " is-today" : ""}" type="button" data-day="${key}"
-      aria-label="${escapeHtml(`Apri ${capitalise(formatDate(day, { weekday: "long", day: "numeric", month: "long" }))}`)}">
+      aria-label="${escapeHtml(`${t("Apri")} ${capitalise(formatDate(day, { weekday: "long", day: "numeric", month: "long" }))}`)}">
       <span>${escapeHtml(WEEKDAY_SHORT[day.getDay()])}</span><strong>${day.getDate()}</strong>
     </button>`;
   }).join("");
@@ -419,10 +438,10 @@ function monthHtml() {
         ${shown.map((occurrence) => {
           const status = statusFor(occurrence);
           return `<button class="cal-chip" type="button" data-occurrence="${escapeHtml(occurrence.id)}" data-color="${occurrence.color}"${status ? ` data-tone="${status.tone}"` : ""} aria-label="${escapeHtml(`${occurrence.subject}, ${occurrence.startTime}${status ? `, ${status.label}` : ""}`)}">
-            <i aria-hidden="true"></i><span class="cal-chip-time">${escapeHtml(occurrence.startTime)}</span><span class="cal-chip-title">${escapeHtml(occurrence.subject || "Lezione")}</span>
+            <i aria-hidden="true"></i><span class="cal-chip-time">${escapeHtml(occurrence.startTime)}</span><span class="cal-chip-title" data-no-translate>${escapeHtml(occurrence.subject || t("Lezione"))}</span>
           </button>`;
         }).join("")}
-        ${hidden > 0 ? `<button class="cal-more" type="button" data-more="${key}">+${hidden} altr${hidden === 1 ? "a" : "e"}</button>` : ""}
+        ${hidden > 0 ? `<button class="cal-more" type="button" data-more="${key}">${getLocale() === "en" ? `+${hidden} more` : `+${hidden} altr${hidden === 1 ? "a" : "e"}`}</button>` : ""}
       </div>
     </div>`;
   }).join("");
@@ -674,7 +693,7 @@ async function onPointerUp(event) {
     return;
   }
 
-  if (!current.moved) { openEditor({ mode: "edit", occurrence: current.occurrence }); return; }
+  if (!current.moved) { openOccurrence(current.occurrence); return; }
 
   const unchanged = current.startMinutes === current.occurrence.startMinutes
     && current.endMinutes === current.occurrence.endMinutes
@@ -688,6 +707,11 @@ function occurrenceById(id) {
   const [eventId, key] = String(id).split("|");
   const event = findEvent(eventId);
   return event ? occurrenceFor(event, parseKey(key)) : null;
+}
+
+function openOccurrence(occurrence) {
+  if (context.openRecording?.(occurrence)) return;
+  openEditor({ mode: "edit", occurrence });
 }
 
 /* Dragging never interrupts with a dialog. A timetable block that moves is
@@ -808,7 +832,7 @@ function buildDialog() {
   dialog.className = "app-dialog cal-dialog";
   dialog.innerHTML = `<form id="cal-form" novalidate>
     <div class="dialog-heading">
-      <div><p class="eyebrow">Calendario</p><h2 id="cal-dialog-title">Nuova lezione</h2></div>
+      <h2 id="cal-dialog-title">Nuova lezione</h2>
       <button class="icon-button" type="button" data-cal-dialog="close" aria-label="Chiudi">×</button>
     </div>
 
@@ -1171,7 +1195,7 @@ function onClick(event) {
     const chip = event.target.closest("[data-occurrence]");
     if (chip) {
       const occurrence = occurrenceById(chip.dataset.occurrence);
-      if (occurrence) openEditor({ mode: "edit", occurrence });
+      if (occurrence) openOccurrence(occurrence);
       return;
     }
     const cell = event.target.closest(".cal-month-cell");
@@ -1184,7 +1208,7 @@ function onClick(event) {
   const block = event.target.closest(".cal-event");
   if (block) {
     const occurrence = occurrenceById(block.dataset.occurrence);
-    if (occurrence) openEditor({ mode: "edit", occurrence });
+    if (occurrence) openOccurrence(occurrence);
     return;
   }
   const column = event.target.closest(".cal-col");
@@ -1200,7 +1224,7 @@ async function onKeydown(event) {
   if (element && (event.key === "Enter" || event.key === " ")) {
     event.preventDefault();
     const occurrence = occurrenceById(element.dataset.occurrence);
-    if (occurrence) openEditor({ mode: "edit", occurrence });
+    if (occurrence) openOccurrence(occurrence);
     return;
   }
   if (!element || !["ArrowUp", "ArrowDown"].includes(event.key)) return;

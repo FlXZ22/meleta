@@ -273,6 +273,25 @@ components:
     padding: 64px
 ---
 
+> **Application override (owner decision).** This document is the analysis of the
+> Apple marketing language the product borrowed from. For the Meleta application
+> itself, `assets/css/design-system.css` is authoritative and supersedes it on
+> three points:
+>
+> - The interactive accent is the **Meleta gold** sampled from the logo mark —
+>   `#d9a43a` for fills and marks, `#8a6212` when the accent has to be read as
+>   text. Action Blue `#0066cc` is retired from the application.
+> - The application canvas is **white throughout**. The alternating
+>   light/parchment/near-black tiling is a marketing device and is not used here;
+>   the only dark surface left is the transient toast.
+> - One font (**Inter**, with system fallbacks), one type scale, one control
+>   geometry. No second display face, no monospace, no fluid marketing headline
+>   sizes, no decorative rules or boxed tiles between sections.
+>
+> Everything else below — spacing discipline, low chrome, no shadows, pill
+> geometry, 44px targets, accessibility requirements — still applies.
+
+
 ## Overview
 
 Apple's web presence is a masterclass in **reverent product photography framed by near-invisible UI**. Every page is a stack of edge-to-edge product "tiles" — alternating light and dark canvases, each centered on a hero headline, a one-line tagline, two tiny blue pill CTAs, and an impossibly crisp product render. Nothing competes with the product. Typography is confident but quiet; color is either pure white, an off-white parchment, or a near-black tile; interactive elements are a single, quiet blue.
